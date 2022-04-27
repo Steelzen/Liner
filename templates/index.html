@@ -31,7 +31,7 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <title>Twitter</title>
+    <title>Linerid</title>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.js"></script>
     <link
@@ -56,7 +56,7 @@
         <a href="/">
           <svg class="bi me-2" width="30" height="24">
             <use xlink:href="#briefcase" /></svg
-          >Twitter
+          >Linerid
         </a>
       </h1>
     </div>
@@ -164,7 +164,9 @@
             {% for i in user %}
             <li class="mb-1">
               <div class="account-info">
-                <h4>{{ i['username'] }}</h4>
+                <h4>
+                  <a href="/profile/{{ i['email'] }}">{{ i['username'] }}</a>
+                </h4>
                 Name: {{ i['name'] }}<br />
                 Email: {{ i['email'] }} <br />
                 Profile: {{ i['profile'] }} <br />
@@ -184,13 +186,25 @@
               <div class="collapse" id="orders-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                   <li>
-                    <div id="edit-user-info">
-                      <form action="/edit_user_info" method="post">
+                    <div id="edit-user-name">
+                      <form action="/edit_user_name" method="post">
                         <label for="name" class="edit-user-info form-label">
                           Name:
                         </label>
                         <input type="text" name="name" class="edit-user-info" />
-                        <br />
+                        <button
+                          type="submit"
+                          class="edit-user-info link-dark rounded"
+                        >
+                          submit
+                        </button>
+                      </form>
+                      <br />
+                    </div>
+                  </li>
+                  <li>
+                    <div id="edit-user-profile">
+                      <form action="/edit_user_profile" method="post">
                         <label for="profile" class="edit-user-info form-label">
                           Profile:
                         </label>
@@ -199,8 +213,8 @@
                           name="profile"
                           class="edit-user-info"
                           id="edit-user-profile"
+                          maxlength="280"
                         />
-                        <br />
                         <button
                           type="submit"
                           class="edit-user-info link-dark rounded"
@@ -264,6 +278,59 @@
             <span class="fs-5 fw-semibold">Time Line</span>
           </a>
           <div class="list-group list-group-flush border-bottom scrollarea">
+            <ul class="list-unstyled ps-0">
+              <li class="mb-1">
+                <button
+                  class="btn btn-toggle align-items-center rounded collapsed"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#createTweet-collapse"
+                  aria-expanded="false"
+                >
+                  Upload Tweet
+                </button>
+                <div class="collapse" id="createTweet-collapse">
+                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li>
+                      <div id="create_tweet">
+                        <form action="/upload_tweet" method="post">
+                          <label
+                            for="content"
+                            class="edit-user-info form-label"
+                          >
+                            Tweet
+                          </label>
+                          <input
+                            type="textfield"
+                            name="content"
+                            class="edit-user-info"
+                            maxlength="280"
+                          />
+                          <button
+                            type="submit"
+                            class="edit-user-info link-dark rounded"
+                          >
+                            submit
+                          </button>
+                        </form>
+                        <br />
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <p id="message_addTweet"></p>
+              <!-- display the message if fail to add tweet-->
+              <script>
+                const searchParamsTweet = new URLSearchParams(
+                  window.location.search
+                );
+                var warningUpload = searchParams.get("warningUpload");
+                console.log(warningUpload);
+                if (warningUpload == 1)
+                  document.getElementById("message_addTweet").innerHTML =
+                    "You should input content";
+              </script>
+            </ul>
             {% for i in task_board %}
             <form
               action="/task_board/{{i['id']}}"

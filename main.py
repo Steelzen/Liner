@@ -36,7 +36,7 @@ def createUserInfo(claims):
 
     datastore_client.put(entity)
 
-def createTweet(email, content):
+def createTweet(email, content, time):
     id = random.getrandbits(63)
 
     entity_key = datastore_client.key('User', email, 'Tweet', id)
@@ -45,7 +45,7 @@ def createTweet(email, content):
         'id': id,
         'owner': email,
         'content': content,
-        'time': None,
+        'time': time,
         'image': []
     })
 
@@ -93,8 +93,8 @@ def inputUsername ():
     return redirect(url_for('.root', warningInputUsername = warningInputUsername))
 
 
-@app.route('/edit_user_info', methods=['POST'])
-def editUserInfo():
+@app.route('/edit_user_name', methods=['POST'])
+def editUserName():
     id_token = request.cookies.get("token")
     error_message = None
     claims = None
@@ -112,8 +112,7 @@ def editUserInfo():
                 warning = 1
             else:
                 user_info.update({
-                    'name': request.form['name'],
-                    'profile': request.form['profile']
+                    'name': request.form['name']
                     })
                     
                 datastore_client.put(user_info)
@@ -124,40 +123,100 @@ def editUserInfo():
     return redirect(url_for('.root', warning = warning))
 
 
-def createTaskBoard(email, title):
-    id = random.getrandbits(63)
+@app.route('/edit_user_profile', methods=['POST'])
+def editUserProfile():
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
 
-    entity_key = datastore_client.key('User', email, 'TaskBoard', id)
-    entity = datastore.Entity(key = entity_key)
-    entity.update({
-        'id': id,
-        'title': title,
-        'owner': email,
-        'user': []
-    })
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
 
-    datastore_client.put(entity)
+            user_info = retrieveUserInfo(claims)
 
-    return id
+            user_info.update({
+                'profile': request.form['profile']
+                })
+                    
+            datastore_client.put(user_info)
+
+        except ValueError as exc:
+            error_message = str(exc)            
+
+    return redirect(url_for('.root'))  
 
 
-def createTask(task_board_id, title, due_date, assigned_user):
-    id = random.getrandbits(63)
+@app.route('/upload_tweet', methods=['POST'])
+def addTweet():
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    warningUpload = None
+    user = None
 
-    entity_key = datastore_client.key('TaskBoard', task_board_id, 'Task', id)
-    entity = datastore.Entity(key = entity_key)
-    entity.update({
-        'id': id,
-        'title': title,
-        'due_date': due_date,
-        'assigned_user': assigned_user,
-        'is_complete': False,
-        'completion_time': None
-    })
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
 
-    datastore_client.put(entity)
+            user_info = retrieveUserInfo(claims)
 
-    return id
+            dt = datetime.datetime.now()
+
+            tweet_list = user_info['tweet_list'] 
+
+            if request.form['content'] == "":
+                warningUpload = 1
+            else:
+                id = createTweet(claims['email'], request.form['content'], dt)
+                tweet_list.append(id)
+                user_info.update({
+                    'tweet_list': tweet_list
+                })
+                datastore_client.put(user_info)
+
+        except ValueError as exc:
+            error_message = str(exc)
+
+    return redirect(url_for('.root', warningUpload = warningUpload))
+
+
+
+@app.route('/profile/<email>', methods=['GET','POST'])
+def viewProfile(email):
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    tweet = None
+    tweet2 = None
+    user = None 
+
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+
+            query = datastore_client.query(kind="User")
+            query.add_filter('email', '=', email)
+            user = query.fetch()
+
+            user_key = datastore_client.key('User', email)
+            query_tweet = datastore_client.query(kind="Tweet", ancestor=user_key)
+            # query_task.order = ['-completion_time']
+            tweet = query_tweet.fetch()
+
+            tweet2 = query_tweet.fetch()    
+
+        except ValueError as exc:
+            error_message = str(exc)    
+            
+    return render_template('profile.html', user_data=claims, error_message=error_message, 
+    user_info = user_info, user = user, tweet = tweet, tweet2 = tweet2)          
+
 
 
 @app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])
