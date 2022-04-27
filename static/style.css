@@ -1,0 +1,80 @@
+body {
+  font-family: "helvetica", sans-serif;
+}
+
+#message_cre, #message_inv, #message_task, #message_rename {
+  color: red;
+}
+
+button {
+  border-color: transparent;
+  background-color: rgb(222, 224, 228);
+  margin: 0.5em;
+}
+
+#create-task-board {
+  padding: 0.1875rem 0.5rem;
+  margin-top: 0.125rem;
+  margin-left: 1.25rem;
+}
+
+.form-label {
+  font-size: medium
+}
+
+.login-info{
+  padding: 0.1875rem 0.5rem;
+  margin-top: 0.125rem;
+  margin-left: 1.25rem;
+}
+
+#app-title {
+  text-align: center;
+}
+
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.active-task-form {
+  display: inline;
+}
+
+#active-task-button {
+ margin-left: 31rem;
+}
+
+.edit-user-info {
+  display: inline;
+}
+
+#edit-user-profile{
+  width: 80%;
+  height: fit-content;
+}
+
+#sign-out{
+  background-color: #d2f4ea;
+}
+
+#assign_user {
+  width: 60%;
+}
+
+#edit-task {
+  margin: 3rem;
+}
+
+.assign-user-edit {
+  display: inline;
+}
+
+#assign_user_edit {
+  margin: 0.3em;
+  width: 50%;
+}
+
+#message_task {
+  margin-left: 3em;
+}
