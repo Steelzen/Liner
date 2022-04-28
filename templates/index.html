@@ -278,94 +278,100 @@
             <span class="fs-5 fw-semibold">Time Line</span>
           </a>
           <div class="list-group list-group-flush border-bottom scrollarea">
-            <ul class="list-unstyled ps-0">
-              <li class="mb-1">
-                <button
-                  class="btn btn-toggle align-items-center rounded collapsed"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#createTweet-collapse"
-                  aria-expanded="false"
-                >
-                  Upload Tweet
-                </button>
-                <div class="collapse" id="createTweet-collapse">
-                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li>
-                      <div id="create_tweet">
-                        <form action="/upload_tweet" method="post">
-                          <label
-                            for="content"
-                            class="edit-user-info form-label"
-                          >
-                            Tweet
-                          </label>
-                          <input
-                            type="textfield"
-                            name="content"
-                            class="edit-user-info"
-                            maxlength="280"
-                          />
-                          <button
-                            type="submit"
-                            class="edit-user-info link-dark rounded"
-                          >
-                            submit
-                          </button>
-                        </form>
-                        <br />
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <p id="message_addTweet"></p>
-              <!-- display the message if fail to add tweet-->
-              <script>
-                const searchParamsTweet = new URLSearchParams(
-                  window.location.search
-                );
-                var warningUpload = searchParams.get("warningUpload");
-                console.log(warningUpload);
-                if (warningUpload == 1)
-                  document.getElementById("message_addTweet").innerHTML =
-                    "You should input content";
-              </script>
-            </ul>
-            {% for i in task_board %}
-            <form
-              action="/task_board/{{i['id']}}"
-              method="post"
-              class="list-group-item list-group-item-action py-3 lh-tight"
-              aria-current="true"
+            <a
+              class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
             >
-              <button
-                href=""
-                type="submit"
+              <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                  <button
+                    class="btn btn-toggle align-items-center rounded collapsed"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#createTweet-collapse"
+                    aria-expanded="false"
+                  >
+                    Upload Tweet
+                  </button>
+                  <div class="collapse" id="createTweet-collapse">
+                    <ul
+                      class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
+                    >
+                      <li>
+                        <div id="create_tweet">
+                          <form action="/upload_tweet" method="post">
+                            <label
+                              for="content"
+                              class="edit-user-info form-label"
+                            >
+                              Tweet
+                            </label>
+                            <input
+                              type="textfield"
+                              name="content"
+                              class="edit-user-info"
+                              maxlength="280"
+                            />
+                            <button
+                              type="submit"
+                              class="edit-user-info link-dark rounded"
+                            >
+                              submit
+                            </button>
+                          </form>
+                          <br />
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <p id="message_addTweet"></p>
+                <!-- display the message if fail to add tweet-->
+                <script>
+                  const searchParamsTweet = new URLSearchParams(
+                    window.location.search
+                  );
+                  var warningUpload = searchParams.get("warningUpload");
+                  console.log(warningUpload);
+                  if (warningUpload == 1)
+                    document.getElementById("message_addTweet").innerHTML =
+                      "You should input content";
+                </script>
+              </ul>
+            </a>
+            {% for i in tweet %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-3 lh-tight"
+            >
+              <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
-                <strong class="mb-1"
-                  >{{ i['owner'] }} / {{ i['title'] }}</strong
+                <strong class="mb-1">{{ i['owner']}}</strong>
+                {% if user_info['username'] == i['owner'] %}
+                <small class="text-muted">
+                  <form
+                    class="active-task-form"
+                    id="edit_task"
+                    action="/edit_tweet/{{i['id']}}"
+                    method="post"
+                  >
+                    <button type="submit">edit</button>
+                  </form></small
                 >
-              </button>
-            </form>
-            {% endfor %} {% for n in all_task_board %} {% if user_data['email']
-            in n['user'] %}
-            <form
-              action="/task_board/{{n['id']}}"
-              method="post"
-              class="list-group-item list-group-item-action py-3 lh-tight"
-              aria-current="true"
-            >
-              <button
-                type="submit"
-                class="d-flex w-100 align-items-center justify-content-between"
-              >
-                <strong class="mb-1"
-                  >{{ n['owner'] }} / {{ n['title'] }}
-                </strong>
-              </button>
-            </form>
-            {% endif %} {% endfor %}
+                <small class="text-muted"
+                  ><form
+                    class="active-task-form"
+                    id="delete_task"
+                    action="/delete_tweet/{{i['id']}}"
+                    method="post"
+                  >
+                    <button type="submit">delete</button>
+                  </form></small
+                >
+                {% endif %}
+              </div>
+              <div class="col-10 mb-1 small">{{ i['content'] }}</div>
+            </a>
+            {% endfor %}
           </div>
         </div>
         <div class="b-example-divider"></div>

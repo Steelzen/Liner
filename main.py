@@ -36,14 +36,14 @@ def createUserInfo(claims):
 
     datastore_client.put(entity)
 
-def createTweet(email, content, time):
+def createTweet(email, username, content, time):
     id = random.getrandbits(63)
 
     entity_key = datastore_client.key('User', email, 'Tweet', id)
     entity = datastore.Entity(key = entity_key)
     entity.update({
         'id': id,
-        'owner': email,
+        'owner': username,
         'content': content,
         'time': time,
         'image': []
@@ -170,7 +170,7 @@ def addTweet():
             if request.form['content'] == "":
                 warningUpload = 1
             else:
-                id = createTweet(claims['email'], request.form['content'], dt)
+                id = createTweet(claims['email'], user_info['username'], request.form['content'], dt)
                 tweet_list.append(id)
                 user_info.update({
                     'tweet_list': tweet_list
@@ -521,7 +521,8 @@ def viewTaskBoard(id):
     user_info = user_info, task_board = task_board, task = task, task2 = task2)
 
        
-    
+
+
 @app.route('/create_task_board', methods=['POST'])
 def addTaskBoard():
     id_token = request.cookies.get("token")
@@ -565,6 +566,7 @@ def root():
     claims = None
     user_info = None
     user = None
+    tweet = None
     task_board = None
     all_task_board = None
 
@@ -578,13 +580,9 @@ def root():
             query_user.add_filter('email', '=', claims["email"])
             user = query_user.fetch()
 
-            ancestor_key = datastore_client.key('User', claims['email'])
-            query = datastore_client.query(kind="TaskBoard", ancestor=ancestor_key)
-            task_board = query.fetch()
-
-            # query for non-owner access to task board
-            query_task_board = datastore_client.query(kind="TaskBoard")
-            all_task_board = query_task_board.fetch()
+            query_tweet = datastore_client.query(kind="Tweet")
+            query_tweet.order = ['-time']
+            tweet = query_tweet.fetch(limit=50)
 
             if user_info == None:
                 createUserInfo(claims)
@@ -594,7 +592,7 @@ def root():
             error_message = str(exc)
 
     return render_template('index.html', user_data=claims, error_message=error_message, 
-    user_info = user_info, user = user, task_board = task_board, all_task_board = all_task_board)
+    user_info = user_info, user = user, tweet = tweet)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
