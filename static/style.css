@@ -29,9 +29,8 @@ button {
 }
 
 #app-title {
-  text-align: center;
-  background-color: #91b5fa;
-  height: 5rem;
+  height: 3rem;
+  border-bottom: 1px solid gray;
 }
 
 a, a:hover, a:focus, a:active {

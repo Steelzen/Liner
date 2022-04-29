@@ -568,8 +568,6 @@ def root():
     user_info = None
     user = None
     tweet = None
-    task_board = None
-    all_task_board = None
 
     if id_token:
         try:
