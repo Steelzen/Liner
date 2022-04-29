@@ -26,7 +26,7 @@ def createUserInfo(claims):
     entity = datastore.Entity(key = entity_key)
     entity.update({
         'email': claims['email'],
-        'name': claims['name'],
+        'name': None,
         'username': None,
         'following': [],
         'follower': [],
@@ -82,6 +82,7 @@ def inputUsername ():
                 warningInputUsername = 2
             else:
                 user_info.update({
+                    'name': request.form['displayname'],
                     'username': request.form['username']
                     })
                     

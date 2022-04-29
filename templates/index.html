@@ -71,9 +71,13 @@
       {% if user_data %} {% if user_info['username'] == None %}
       <form action="/input_username" method="post">
         <label for="username" class="username-form form-label">
-          Username:
+          Username(*):
         </label>
         <input type="text" name="username" class="username-form" />
+        <label for="displayname" class="username-form form-label">
+          Displayname(First name & Last name):
+        </label>
+        <input type="text" name="displayname" class="username-form" />
         <button type="submit" class="username-form link-dark rounded">
           Enter
         </button>
@@ -252,10 +256,10 @@
               <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                   <li class="login-info form-label">
-                    Name: {{ user_data['name'] }}
+                    Name: {{ user_info['name'] }}
                   </li>
                   <li class="login-info form-label">
-                    Email: {{ user_data['email'] }}
+                    Email: {{ user_info['email'] }}
                   </li>
                 </ul>
               </div>
