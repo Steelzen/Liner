@@ -407,7 +407,7 @@
             </a>
             {% for i in tweet %}
             <a
-              href="#"
+              href="/{{ i['owner']}}"
               class="list-group-item list-group-item-action py-3 lh-tight"
             >
               <div
@@ -471,7 +471,7 @@
             </script>
             {% if result_content == None %} {% for k in result_name %}
             <a
-              href="#"
+              href="/{{ k['username'] }}"
               class="list-group-item list-group-item-action py-3 lh-tight"
             >
               <div

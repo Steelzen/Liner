@@ -78,7 +78,7 @@ def inputUsername ():
                 
             if request.form['username'] == "":
                 warningInputUsername = 1
-            elif request.form['username'] in usernames:
+            elif request.form['username'] in usernames or request.form['username'] == "null":
                 warningInputUsername = 2
             else:
                 user_info.update({
@@ -270,8 +270,8 @@ def rootSearch(search_by, text):
 
 
 
-@app.route('/profile/<email>', methods=['GET','POST'])
-def viewProfile(email):
+@app.route('/<username>', methods=['GET','POST'])
+def viewProfile(username):
     id_token = request.cookies.get("token")
     error_message = None
     claims = None
@@ -287,10 +287,10 @@ def viewProfile(email):
             user_info = retrieveUserInfo(claims)
 
             query = datastore_client.query(kind="User")
-            query.add_filter('email', '=', email)
+            query.add_filter('username', '=', username)
             user = query.fetch()
 
-            user_key = datastore_client.key('User', email)
+            user_key = datastore_client.key('User', username)
             query_tweet = datastore_client.query(kind="Tweet", ancestor=user_key)
             # query_task.order = ['-completion_time']
             tweet = query_tweet.fetch()
@@ -395,7 +395,6 @@ def editTaskPage(task_board_id, task_id):
 
     return render_template('edit_task.html', user_data=claims, error_message=error_message, 
     user_info = user_info, task_board = task_board, task = task)            
-
 
 
 @app.route('/create_task/<int:id>', methods=['POST'])
