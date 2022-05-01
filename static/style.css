@@ -29,8 +29,15 @@ button {
 }
 
 #app-title {
-  height: 3rem;
+  display: flex;
+  min-height: 4rem;
   border-bottom: 1px solid gray;
+}
+
+@media (max-width: 800px) {
+  #app-title, #search {
+    flex-direction: column;
+  }
 }
 
 a, a:hover, a:focus, a:active {
@@ -58,6 +65,8 @@ a, a:hover, a:focus, a:active {
 
 #sign-out{
   background-color: #d2f4ea;
+  width: 5rem;
+  max-height: 2rem;
 }
 
 #assign_user {
@@ -79,4 +88,28 @@ a, a:hover, a:focus, a:active {
 
 #message_task {
   margin-left: 3em;
+}
+
+/*search box css start here*/
+.search-sec{
+  padding-top: 0.5rem;
+}
+.search-slt{
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  height: calc(3rem + 2px) !important;
+  border-radius:0;
+}
+.wrn-btn{
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+  height: calc(3rem + 2px) !important;
+  border-radius:0;
 }

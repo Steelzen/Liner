@@ -185,6 +185,91 @@ def addTweet():
 
 
 
+@app.route('/search_by', methods=['GET','POST'])
+def search():
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    result_name = None
+    result_content = None
+    has_result = 0
+
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+            search_list = []
+
+            if request.form['search-by'] == "username":
+                query_username = datastore_client.query(kind="User")
+                query_username.add_filter('username', '=', request.form['search-by-option'])
+                result_name = query_username.fetch()
+                
+                for i in result_name:
+                    search_list.append(i['username'])
+                if not search_list == []:
+                    has_result = 1   
+                                        
+            elif request.form['search-by'] == "content":
+                query_content = datastore_client.query(kind="Tweet")
+                query_content.add_filter('content', '=', request.form['search-by-option'])
+                result_content = query_content.fetch()
+
+                for i in result_content:
+                    search_list.append(i['content'])
+                if not search_list == []:
+                    has_result = 1 
+
+        except ValueError as exc:
+            error_message = str(exc)
+
+    return redirect(url_for('.rootSearch', search_by = request.form['search-by'], text = request.form['search-by-option'], has_result = has_result, search_list = search_list))
+
+
+
+@app.route('/search/<search_by>/<text>', methods=['GET','POST'])
+def rootSearch(search_by, text):
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    user = None
+    result_name = None
+    result_content = None
+    is_search = 1
+
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+
+            query_user = datastore_client.query(kind="User")
+            query_user.add_filter('email', '=', claims["email"])
+            user = query_user.fetch()
+
+            search_list = []
+            
+            if search_by == "username":
+                query_username = datastore_client.query(kind="User")
+                query_username.add_filter('username', '=', text)
+                result_name = query_username.fetch()
+                                        
+            elif search_by == "content":
+                query_content = datastore_client.query(kind="Tweet")
+                query_content.add_filter('content', '=', text)
+                result_content = query_content.fetch()
+
+        except ValueError as exc:
+            error_message = str(exc)
+
+    return render_template('index.html', user_data=claims, error_message=error_message, 
+    user_info = user_info, user = user, result_name = result_name, result_content = result_content, is_search = is_search)
+
+
+
 @app.route('/profile/<email>', methods=['GET','POST'])
 def viewProfile(email):
     id_token = request.cookies.get("token")
@@ -350,6 +435,7 @@ def addTaskToTaskBoard(id):
     return redirect(url_for('.viewTaskBoard', id = id, warningTask = warningTask))
 
 
+
 @app.route('/rename_board/<int:id>', methods=['POST'])
 def renameTaskBoard(id):
     id_token = request.cookies.get("token")
@@ -392,19 +478,6 @@ def renameTaskBoard(id):
             error_message = str(exc)
 
     return redirect(url_for('.viewTaskBoard', id = id, warningRename = warningRename))
-
-
-# def modifyTaskBoard():
-
-# def removeUserFromTaskBoard():
-
-# def addMarker():
-
-# def removeTaskBoard():    
-
-# def addCounter():
-
-# def highlight():   
 
 
 @app.route('/invite_user/<int:id>', methods=['GET','POST'])
@@ -568,6 +641,7 @@ def root():
     user_info = None
     user = None
     tweet = None
+    is_search = 0
 
     if id_token:
         try:
@@ -591,7 +665,7 @@ def root():
             error_message = str(exc)
 
     return render_template('index.html', user_data=claims, error_message=error_message, 
-    user_info = user_info, user = user, tweet = tweet)
+    user_info = user_info, user = user, tweet = tweet, is_search = is_search)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

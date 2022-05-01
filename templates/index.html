@@ -14,6 +14,18 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
 
     <style>
       .bd-placeholder-img {
@@ -52,13 +64,69 @@
   </head>
   <body>
     <div id="app-title">
-        <a href="/">
-          <svg class="bi me-2" width="30" height="24">
-            <use xlink:href="#briefcase" /></svg
-          >Liner
-        </a>
-        <button id="sign-out" hidden="true" class="link-dark rounded">
-          Sign out
+      <a href="/">
+        <svg class="bi me-2" width="30" height="24">
+          <use xlink:href="#briefcase" /></svg
+        >Liner
+      </a>
+      <button id="sign-out" hidden="true" class="link-dark rounded">
+        Sign out
+      </button>
+
+      <section class="search-sec" id="search-pad" hidden="true">
+        <div class="container">
+          <form
+            action="/search_by"
+            method="post"
+            id="search"
+            novalidate="novalidate"
+            onsubmit="validate()"
+          >
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                    <input
+                      type="text"
+                      name="search-by-option"
+                      class="form-control search-slt"
+                      placeholder="Enter Search"
+                    />
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                    <select
+                      name="search-by"
+                      id="search-by"
+                      class="form-control search-slt"
+                    >
+                      <option value="username">Username</option>
+                      <option value="content">Content</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                    <button type="submit" class="btn btn-danger wrn-btn">
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <script>
+            function validate() {
+              var formId = document.getElementById("search");
+              var allInputs = formId.getElementsByTagName("input");
+              var input, i;
+
+              for (i = 0; (input = allInputs[i]); i++) {
+                if (input.value == null || input.value == "") {
+                  input.value = "null";
+                }
+              }
+            }
+          </script>
+        </div>
+      </section>
     </div>
 
     <div id="firebase-auth-container"></div>
@@ -165,7 +233,7 @@
             <li class="mb-1">
               <div class="account-info">
                 <h4>
-                  <a href="/profile/{{ i['email'] }}">{{ i['username'] }}</a>
+                  <a href="/profile/{{ i['username'] }}">{{ i['username'] }}</a>
                 </h4>
                 Name: {{ i['name'] }}<br />
                 Email: {{ i['email'] }} <br />
@@ -264,7 +332,7 @@
         </div>
 
         <!-- <div class="b-example-divider"></div> -->
-
+        {% if is_search == 0 %}
         <div
           class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
           style="width: 40em"
@@ -374,6 +442,62 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %} {% if is_search == 1 %}
+        <div
+          class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
+          style="width: 40em"
+        >
+          <a
+            class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
+          >
+            <svg class="bi me-2" width="30" height="24">
+              <use xlink:href="#card-list" />
+            </svg>
+            <span class="fs-5 fw-semibold">Search Result</span>
+          </a>
+          <div class="list-group list-group-flush border-bottom scrollarea">
+            <p id="message_noResult" hidden="true">No result</p>
+            <script>
+              const searchParamsNoResult = new URLSearchParams(
+                window.location.search
+              );
+              var hasResult = searchParamsNoResult.get("has_result");
+              console.log(hasResult);
+              if (hasResult == 0) {
+                document.getElementById("message_noResult").innerHTML =
+                  "No Result";
+                document.getElementById("message_noResult").hidden = false;
+              }
+            </script>
+            {% if result_content == None %} {% for k in result_name %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-3 lh-tight"
+            >
+              <div
+                class="d-flex w-100 align-items-center justify-content-between"
+              >
+                <strong class="mb-1">{{ k['username'] }}</strong>
+              </div>
+              <div class="col-10 mb-1 small">{{ k['email'] }}</div>
+            </a>
+            {% endfor %} {% else %} {% for k in result_content %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action py-3 lh-tight"
+            >
+              <div
+                class="d-flex w-100 align-items-center justify-content-between"
+              >
+                <strong class="mb-1">{{ k['owner'] }}</strong>
+              </div>
+              <div class="col-10 mb-1 small">{{ k['content'] }}</div>
+            </a>
+            {% endfor %} {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        <!-- condition for search -->
         <!-- <div class="b-example-divider"></div> -->
       </main>
       {% endif %} {% elif error_message %}

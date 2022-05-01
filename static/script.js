@@ -23,6 +23,7 @@ window.addEventListener('load', function () {
             // user is signed in so display the sign out button, and login info
             document.getElementById('sign-out').hidden = false;
             document.getElementById('login-info').hidden = false;
+            document.getElementById('search-pad').hidden = false;
 
             // log the user login to console for debug purposes with the name and email address
             console.log('Signed in as ${user.displayName} (${user.email})');
@@ -39,6 +40,7 @@ window.addEventListener('load', function () {
             // hide the signout and login-info fields and clear the token
             document.getElementById('sign-out').hidden = true;
             document.getElementById('login-info').hidden = true;
+            document.getElementById('search-pad').hidden = true;
             document.cookie = "token=;path=/";
         }
     }, function(error) {
