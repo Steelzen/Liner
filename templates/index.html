@@ -120,7 +120,7 @@
 
               for (i = 0; (input = allInputs[i]); i++) {
                 if (input.value == null || input.value == "") {
-                  input.value = "null";
+                  input.value = "#%null#%";
                 }
               }
             }
@@ -456,7 +456,7 @@
             <span class="fs-5 fw-semibold">Search Result</span>
           </a>
           <div class="list-group list-group-flush border-bottom scrollarea">
-            <p id="message_noResult" hidden="true">No result</p>
+            <p id="message_noResult" hidden="true"></p>
             <script>
               const searchParamsNoResult = new URLSearchParams(
                 window.location.search
@@ -489,9 +489,9 @@
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
-                <strong class="mb-1">{{ k['owner'] }}</strong>
+                <strong class="mb-1">{{ k.owner }}</strong>
               </div>
-              <div class="col-10 mb-1 small">{{ k['content'] }}</div>
+              <div class="col-10 mb-1 small">{{ k.content }}</div>
             </a>
             {% endfor %} {% endif %}
           </div>

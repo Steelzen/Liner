@@ -1,6 +1,6 @@
 indexes:
   - kind: Tweet
-    ancestor: yes
+    ancestor: no
     properties:
       - name: id
       - name: owner

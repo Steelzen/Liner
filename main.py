@@ -1,6 +1,7 @@
 #GCD GitLab repository: https://gitlab.griffith.ie/taehyung.kwon/cpa_assignment3
 import datetime
 import random
+import shlex
 from flask import Flask, render_template, request, redirect
 from flask import session, url_for
 from google.cloud import datastore
@@ -36,10 +37,10 @@ def createUserInfo(claims):
 
     datastore_client.put(entity)
 
-def createTweet(email, username, content, time):
+def createTweet(username, content, time):
     id = random.getrandbits(63)
 
-    entity_key = datastore_client.key('User', email, 'Tweet', id)
+    entity_key = datastore_client.key('Tweet', id)
     entity = datastore.Entity(key = entity_key)
     entity.update({
         'id': id,
@@ -171,7 +172,7 @@ def addTweet():
             if request.form['content'] == "":
                 warningUpload = 1
             else:
-                id = createTweet(claims['email'], user_info['username'], request.form['content'], dt)
+                id = createTweet(user_info['username'], request.form['content'], dt)
                 tweet_list.append(id)
                 user_info.update({
                     'tweet_list': tweet_list
@@ -188,44 +189,33 @@ def addTweet():
 @app.route('/search_by', methods=['GET','POST'])
 def search():
     id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    result_name = None
-    result_content = None
     has_result = 0
+    tweet = None
 
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+    search_list = []
 
-            user_info = retrieveUserInfo(claims)
-            search_list = []
-
-            if request.form['search-by'] == "username":
-                query_username = datastore_client.query(kind="User")
-                query_username.add_filter('username', '=', request.form['search-by-option'])
-                result_name = query_username.fetch()
+    if request.form['search-by'] == "username":
+        query_username = datastore_client.query(kind="User")
+        query_username.add_filter('username', '=', request.form['search-by-option'])
+        result_name = query_username.fetch()
                 
-                for i in result_name:
-                    search_list.append(i['username'])
-                if not search_list == []:
-                    has_result = 1   
+        for i in result_name:
+            search_list.append(i['username'])
+        if not search_list == []:
+            has_result = 1   
                                         
-            elif request.form['search-by'] == "content":
-                query_content = datastore_client.query(kind="Tweet")
-                query_content.add_filter('content', '=', request.form['search-by-option'])
-                result_content = query_content.fetch()
+    elif request.form['search-by'] == "content":
+        query_tweet = datastore_client.query(kind="Tweet")
+        tweet = query_tweet.fetch()
+        
+        for k in tweet:
+            if(k['content'].find(request.form['search-by-option']) != -1):
+                search_list.append(k['id'])
 
-                for i in result_content:
-                    search_list.append(i['content'])
-                if not search_list == []:
-                    has_result = 1 
+        if not search_list == []:
+            has_result = 1  
 
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return redirect(url_for('.rootSearch', search_by = request.form['search-by'], text = request.form['search-by-option'], has_result = has_result, search_list = search_list))
+    return redirect(url_for('.rootSearch', search_by = request.form['search-by'], text = request.form['search-by-option'], has_result = has_result))
 
 
 
@@ -239,6 +229,7 @@ def rootSearch(search_by, text):
     result_name = None
     result_content = None
     is_search = 1
+    tweet = None
 
     if id_token:
         try:
@@ -258,9 +249,20 @@ def rootSearch(search_by, text):
                 result_name = query_username.fetch()
                                         
             elif search_by == "content":
-                query_content = datastore_client.query(kind="Tweet")
-                query_content.add_filter('content', '=', text)
-                result_content = query_content.fetch()
+                query_tweet = datastore_client.query(kind="Tweet")
+                query_tweet.order = ['-time']
+                tweet = query_tweet.fetch()
+
+                for k in tweet:
+                    if(k['content'].find(text) != -1):
+                        search_list.append(k['id'])
+
+                content_keys=[]
+
+                for i in range(len(search_list)):
+                    content_keys.append(datastore_client.key('Tweet', search_list[i]))  
+
+                result_content = datastore_client.get_multi(content_keys)
 
         except ValueError as exc:
             error_message = str(exc)
