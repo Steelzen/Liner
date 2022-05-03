@@ -221,7 +221,7 @@
                     <form
                       class="active-task-form"
                       id="btn-follow"
-                      action="/edit_tweet/{{i['id']}}"
+                      action="/follow/{{i['username']}}"
                       method="post"
                     >
                       <button type="submit">follow</button>
@@ -231,7 +231,7 @@
                     ><form
                       class="active-task-form"
                       id="btn-unfollow"
-                      action="/delete_tweet/{{i['id']}}"
+                      action="/unfollow/{{i['username']}}"
                       method="post"
                     >
                       <button type="submit">unfollow</button>

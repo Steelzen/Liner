@@ -21,7 +21,6 @@ def retrieveUserInfo(claims):
 
     return entity
 
-
 def createUserInfo(claims):
     entity_key = datastore_client.key('User', claims['email'])
     entity = datastore.Entity(key = entity_key)
@@ -189,7 +188,6 @@ def addTweet():
 
 @app.route('/search_by', methods=['GET','POST'])
 def search():
-    id_token = request.cookies.get("token")
     has_result = 0
     tweet = None
 
@@ -307,7 +305,52 @@ def viewProfile(username):
     user_info = user_info, user = user, tweet = tweet)          
 
 
-# def followUser():
+@app.route('/follow/<username>', methods=['POST'])
+def followUser(username):
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    follower_entity = None
+    userFollow = username
+
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+
+            following_list = []
+            follower_list = []
+
+            following_list = user_info['following']
+            following_list.append(username)
+            user_info.update({
+                'following': following_list
+                })
+            datastore_client.put(user_info)
+
+            query_follower = datastore_client.query(kind='User')
+            query_follower.add_filter('username', '=', username)
+            user = query_follower.fetch()
+
+            for i in user:
+                email = i['email']
+
+            follower_key = datastore_client.key('User', email)
+            follower_entity = datastore_client.get(follower_key)
+            follower_list = follower_entity['follower']
+            follower_list.append(user_info['username'])
+            follower_entity.update({
+                'follower': follower_list
+                })
+            datastore_client.put(follower_entity)    
+
+        except ValueError as exc:
+            error_message = str(exc)
+
+    return redirect(url_for('.viewProfile', username = userFollow))
+
 
 # def unfollowUser():    
 
