@@ -216,17 +216,8 @@
                   </div>
                 </li>
                 <div class="follow-btn">
-                  {% if user_info['username'] != i['username'] %}
-                  <small class="text-muted">
-                    <form
-                      class="active-task-form"
-                      id="btn-follow"
-                      action="/follow/{{i['username']}}"
-                      method="post"
-                    >
-                      <button type="submit">follow</button>
-                    </form></small
-                  >
+                  {% if user_info['username'] != i['username'] %} {% if
+                  user_info['username'] in i['follower'] %}
                   <small class="text-muted"
                     ><form
                       class="active-task-form"
@@ -237,7 +228,19 @@
                       <button type="submit">unfollow</button>
                     </form></small
                   >
-                  {% endif %}
+
+                  {% else %}
+                  <small class="text-muted">
+                    <form
+                      class="active-task-form"
+                      id="btn-follow"
+                      action="/follow/{{i['username']}}"
+                      method="post"
+                    >
+                      <button type="submit">follow</button>
+                    </form></small
+                  >
+                  {% endif %} {% endif %}
                 </div>
 
                 <li class="border-top my-3"></li>
