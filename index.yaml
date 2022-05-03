@@ -1,10 +1,9 @@
 indexes:
   - kind: Tweet
-    ancestor: no
     properties:
-      - name: id
       - name: owner
-      - name: content
       - name: time
         direction: desc
+      - name: id
+      - name: content
       - name: image
