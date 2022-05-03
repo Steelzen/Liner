@@ -233,7 +233,7 @@
             <li class="mb-1">
               <div class="account-info">
                 <h4>
-                  <a href="/profile/{{ i['username'] }}">{{ i['username'] }}</a>
+                  <a href="/{{ i['username'] }}">{{ i['username'] }}</a>
                 </h4>
                 Name: {{ i['name'] }}<br />
                 Email: {{ i['email'] }} <br />
@@ -483,7 +483,7 @@
             </a>
             {% endfor %} {% else %} {% for k in result_content %}
             <a
-              href="#"
+              href="/{{ k['owner'] }}"
               class="list-group-item list-group-item-action py-3 lh-tight"
             >
               <div

@@ -41,6 +41,7 @@ def createTweet(username, content, time):
     id = random.getrandbits(63)
 
     entity_key = datastore_client.key('Tweet', id)
+    # entity_key = datastore_client.key('Tweet')
     entity = datastore.Entity(key = entity_key)
     entity.update({
         'id': id,
@@ -294,8 +295,8 @@ def viewProfile(username):
 
             query_tweet = datastore_client.query(kind="Tweet")
             query_tweet.add_filter('owner', '=', username)
-            # query_tweet.add_filter('time', '>', 0)
-            # query_tweet.order = ['-time']
+            query_tweet.add_filter('time', '>', 0)
+            query_tweet.order = ['-time']
             tweet = query_tweet.fetch(limit=50)
 
    
@@ -306,56 +307,9 @@ def viewProfile(username):
     user_info = user_info, user = user, tweet = tweet)          
 
 
+# def followUser():
 
-# @app.route('/<username>', methods=['GET','POST'])
-# def viewProfile(username):
-#     id_token = request.cookies.get("token")
-#     error_message = None
-#     claims = None
-#     user_info = None
-#     tweet = None
-#     tweet2 = None
-#     user = None 
-
-#     if id_token:
-#         try:
-#             claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-#             user_info = retrieveUserInfo(claims)
-
-#             query = datastore_client.query(kind="User")
-#             query.add_filter('username', '=', username)
-#             user = query.fetch()
-
-#             query_tweet = datastore_client.query(kind="Tweet")
-#             # query_tweet.add_filter('owner', '=', username)
-#             query_tweet.order = ['-time']
-#             tweet = query_tweet.fetch(limit=50)
-
-#             tweet_list = []
-
-#             for k in tweet:
-#                 if(k['owner'] == username):
-#                     tweet_list.append(k['id'])
-
-#             print(tweet_list)        
-
-#             content_keys=[]
-
-#             for i in range(len(tweet_list)):
-#                 content_keys.append(datastore_client.key('Tweet', tweet_list[i]))
-
-#             print(content_keys)      
-
-#             tweet_entity = datastore_client.get_multi(content_keys)
-
-#             print(tweet_entity)
-   
-#         except ValueError as exc:
-#             error_message = str(exc)    
-            
-#     return render_template('profile.html', user_data=claims, error_message=error_message, 
-#     user_info = user_info, user = user, tweet = tweet, tweet_entity = tweet_entity)  
+# def unfollowUser():    
 
 
 @app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])

@@ -208,9 +208,7 @@
                 <li class="mb-1">
                   <div class="account-info">
                     <h4>
-                      <a href="/profile/{{ i['username'] }}"
-                        >{{ i['username'] }}</a
-                      >
+                      <a href="/{{ i['username'] }}">{{ i['username'] }}</a>
                     </h4>
                     Name: {{ i['name'] }}<br />
                     Email: {{ i['email'] }} <br />
@@ -218,6 +216,7 @@
                   </div>
                 </li>
                 <div class="follow-btn">
+                  {% if user_info['username'] != i['username'] %}
                   <small class="text-muted">
                     <form
                       class="active-task-form"
@@ -238,6 +237,7 @@
                       <button type="submit">unfollow</button>
                     </form></small
                   >
+                  {% endif %}
                 </div>
 
                 <li class="border-top my-3"></li>
@@ -345,6 +345,7 @@
                     <button type="submit">edit</button>
                   </form></small
                 >
+
                 <small class="text-muted"
                   ><form
                     class="active-task-form"

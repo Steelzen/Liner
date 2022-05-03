@@ -4,6 +4,3 @@ indexes:
       - name: owner
       - name: time
         direction: desc
-      - name: id
-      - name: content
-      - name: image
