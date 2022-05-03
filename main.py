@@ -352,7 +352,59 @@ def followUser(username):
     return redirect(url_for('.viewProfile', username = userFollow))
 
 
-# def unfollowUser():    
+@app.route('/unfollow/<username>', methods=['POST'])
+def unfollowUser(username):
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    follower_entity = None
+    userFollow = username
+
+    if id_token:
+        try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+
+            following_list = []
+            follower_list = []
+
+            following_list = user_info['following']
+
+            following_list[:] = [x for x in following_list if not x == username]
+
+            print(following_list)
+
+            user_info.update({
+                'following': following_list
+                })
+
+            datastore_client.put(user_info)
+
+            query_follower = datastore_client.query(kind='User')
+            query_follower.add_filter('username', '=', username)
+            user = query_follower.fetch()
+
+            for i in user:
+                email = i['email']
+
+            follower_key = datastore_client.key('User', email)
+            follower_entity = datastore_client.get(follower_key)
+            follower_list = follower_entity['follower']
+
+            follower_list[:] = [y for y in follower_list if not y == user_info['username']]
+
+            follower_entity.update({
+                'follower': follower_list
+                })
+
+            datastore_client.put(follower_entity)    
+
+        except ValueError as exc:
+            error_message = str(exc)
+
+    return redirect(url_for('.viewProfile', username = userFollow))    
 
 
 @app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])
