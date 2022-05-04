@@ -305,6 +305,7 @@ def viewProfile(username):
     user_info = user_info, user = user, tweet = tweet)          
 
 
+
 @app.route('/follow/<username>', methods=['POST'])
 def followUser(username):
     id_token = request.cookies.get("token")
@@ -406,6 +407,35 @@ def unfollowUser(username):
             error_message = str(exc)
 
     return redirect(url_for('.viewProfile', username = userFollow))    
+
+
+@app.route('/edit_tweet/<int:id>', methods=['POST'])
+def editTweet(id):
+    id_token = request.cookies.get("token")
+    error_message = None
+    claims = None
+    user_info = None
+    tweet = None
+
+    if id_token:
+        try:
+            tweet_key = datastore_client.key('Tweet', id)
+            tweet = datastore_client.get(tweet_key)
+
+            if request.form['editTweet'] == "":
+                warningEdit = 1
+                return redirect(url_for('.editTweetPage', id = id, warningEdit = warningEdit))
+            else:
+                tweet.update({
+                    'content': request.form['editTweet'],
+                })
+                
+                datastore_client.put(tweet)
+                
+                return redirect(url_for('.root'))
+                
+        except ValueError as exc:
+            error_message = str(exc)
 
 
 
@@ -582,6 +612,7 @@ def renameTaskBoard(id):
             error_message = str(exc)
 
     return redirect(url_for('.viewTaskBoard', id = id, warningRename = warningRename))
+
 
 
 @app.route('/invite_user/<int:id>', methods=['GET','POST'])

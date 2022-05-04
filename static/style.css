@@ -12,6 +12,11 @@ button {
   margin: 0.5em;
 }
 
+.non-style-button {
+  background-color: transparent;
+
+}
+
 #create-task-board {
   padding: 0.1875rem 0.5rem;
   margin-top: 0.125rem;
@@ -112,4 +117,60 @@ a, a:hover, a:focus, a:active {
   text-transform: capitalize;
   height: calc(3rem + 2px) !important;
   border-radius:0;
+}
+
+
+/** For edit tweet form **/
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-edit {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-edit input[type=textfield] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-edit input[type=textfield]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-edit .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-edit .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-edit .btn:hover, .open-button:hover {
+  opacity: 1;
 }

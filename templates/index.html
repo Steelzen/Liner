@@ -407,25 +407,64 @@
             </a>
             {% for i in tweet %} {% if i['owner'] == user_info['username'] or
             i['owner'] in user_info['following'] %}
-            <a
-              href="/{{ i['owner'] }}"
-              class="list-group-item list-group-item-action py-3 lh-tight"
-            >
+            <a class="list-group-item list-group-item-action py-3 lh-tight">
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
-                <strong class="mb-1">{{ i['owner'] }}</strong>
+                <button
+                  class="non-style-button"
+                  onclick="document.location=`/{{ i['owner'] }}`"
+                >
+                  <strong class="mb-1"> {{ i['owner'] }} </strong>
+                </button>
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
+                  <button
+                    class="open-button"
+                    id="edit-tweet-button"
+                    onclick="openForm()"
+                  >
+                    edit
+                  </button></small
+                >
+                <div class="form-popup" id="edit_tweet">
                   <form
-                    class="active-task-form"
-                    id="edit_task"
+                    class="form-edit"
                     action="/edit_tweet/{{ i['id'] }}"
                     method="post"
                   >
-                    <button type="submit">edit</button>
-                  </form></small
-                >
+                    <h1>Edit tweet</h1>
+
+                    <label for="editTweet"><b>Tweet</b></label>
+                    <input
+                      type="textfield"
+                      placeholder="{{ i['content'] }}"
+                      name="editTweet"
+                      required
+                    />
+
+                    <button type="submit" class="btn">submit</button>
+                    <button
+                      type="button"
+                      class="btn cancel"
+                      onclick="closeForm()"
+                    >
+                      Close
+                    </button>
+                  </form>
+                </div>
+                <script>
+                  function openForm() {
+                    document.getElementById("edit_tweet").style.display =
+                      "block";
+                  }
+
+                  function closeForm() {
+                    document.getElementById("edit_tweet").style.display =
+                      "none";
+                  }
+                </script>
+
                 <small class="text-muted"
                   ><form
                     class="active-task-form"

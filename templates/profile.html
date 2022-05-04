@@ -329,14 +329,16 @@
               </ul>
             </a>
             {% for i in tweet %}
-            <a
-              href="/{{ i['owner'] }}"
-              class="list-group-item list-group-item-action py-3 lh-tight"
-            >
+            <a class="list-group-item list-group-item-action py-3 lh-tight">
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
-                <strong class="mb-1">{{ i['owner'] }}</strong>
+                <button
+                  class="non-style-button"
+                  onclick="document.location=`/{{ i['owner'] }}`"
+                >
+                  <strong class="mb-1"> {{ i['owner'] }} </strong>
+                </button>
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
                   <form
