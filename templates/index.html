@@ -407,19 +407,19 @@
             </a>
             {% for i in tweet %}
             <a
-              href="/{{ i['owner'] }}"
+              href="/{{ i.owner }}"
               class="list-group-item list-group-item-action py-3 lh-tight"
             >
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
-                <strong class="mb-1">{{ i['owner']}}</strong>
+                <strong class="mb-1">{{ i.owner }}</strong>
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
                   <form
                     class="active-task-form"
                     id="edit_task"
-                    action="/edit_tweet/{{i['id']}}"
+                    action="/edit_tweet/{{ i.id }}"
                     method="post"
                   >
                     <button type="submit">edit</button>
@@ -429,7 +429,7 @@
                   ><form
                     class="active-task-form"
                     id="delete_task"
-                    action="/delete_tweet/{{i['id']}}"
+                    action="/delete_tweet/{{ i.id }}"
                     method="post"
                   >
                     <button type="submit">delete</button>
@@ -437,7 +437,7 @@
                 >
                 {% endif %}
               </div>
-              <div class="col-10 mb-1 small">{{ i['content'] }}</div>
+              <div class="col-10 mb-1 small">{{ i.content }}</div>
             </a>
             {% endfor %}
           </div>

@@ -352,6 +352,7 @@ def followUser(username):
     return redirect(url_for('.viewProfile', username = userFollow))
 
 
+
 @app.route('/unfollow/<username>', methods=['POST'])
 def unfollowUser(username):
     id_token = request.cookies.get("token")
@@ -405,6 +406,8 @@ def unfollowUser(username):
             error_message = str(exc)
 
     return redirect(url_for('.viewProfile', username = userFollow))    
+
+
 
 
 @app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])
@@ -742,6 +745,7 @@ def root():
     user_info = None
     user = None
     tweet = None
+    tweets = None
     is_search = 0
 
     if id_token:
@@ -750,23 +754,38 @@ def root():
 
             user_info = retrieveUserInfo(claims)
 
-            query_user = datastore_client.query(kind="User")
-            query_user.add_filter('email', '=', claims["email"])
-            user = query_user.fetch()
-
-            query_tweet = datastore_client.query(kind="Tweet")
-            query_tweet.order = ['-time']
-            tweet = query_tweet.fetch(limit=50)
-
             if user_info == None:
                 createUserInfo(claims)
                 user_info = retrieveUserInfo(claims)
+
+
+            if(user_info['username']):
+                query_user = datastore_client.query(kind="User")
+                query_user.add_filter('email', '=', claims["email"])
+                user = query_user.fetch()
+                
+                query_tweet = datastore_client.query(kind="Tweet")
+                query_tweet.order = ['-time']
+                tweet = query_tweet.fetch(limit=50)
+
+                tweet_list = []
+
+                for k in tweet:
+                    if(k['owner'] == user_info['username'] or k['owner'] in user_info['following']):
+                        tweet_list.append(k['id'])
+
+                tweet_keys=[]
+
+                for i in range(len(tweet_list)):
+                    tweet_keys.append(datastore_client.key('Tweet', tweet_list[i]))  
+
+                tweets = datastore_client.get_multi(tweet_keys)     
     
         except ValueError as exc:
             error_message = str(exc)
 
     return render_template('index.html', user_data=claims, error_message=error_message, 
-    user_info = user_info, user = user, tweet = tweet, is_search = is_search)
+    user_info = user_info, user = user, tweet = tweets, is_search = is_search)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
