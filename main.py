@@ -409,6 +409,25 @@ def unfollowUser(username):
     return redirect(url_for('.viewProfile', username = userFollow))    
 
 
+@app.route('/edit_tweet_popup/<int:id>', methods=['GET', 'POST'])
+def editTweetPage(id):
+    id_token = request.cookies.get("token")
+    error_message = None
+    tweet = None
+
+    if id_token:
+        try:
+            query = datastore_client.query(kind="Tweet")
+            query.add_filter('id', '=', id)
+            tweet = query.fetch()
+
+
+        except ValueError as exc:
+            error_message = str(exc)    
+
+    return render_template('edit_tweet_popup.html', error_message=error_message, tweet = tweet)
+
+
 @app.route('/edit_tweet/<int:id>', methods=['POST'])
 def editTweet(id):
     id_token = request.cookies.get("token")
@@ -416,28 +435,31 @@ def editTweet(id):
     claims = None
     user_info = None
     tweet = None
+    warningEdit = None
 
     if id_token:
         try:
+            dt = datetime.datetime.now()
+
             tweet_key = datastore_client.key('Tweet', id)
             tweet = datastore_client.get(tweet_key)
 
             if request.form['editTweet'] == "":
                 warningEdit = 1
-                return redirect(url_for('.editTweetPage', id = id, warningEdit = warningEdit))
             else:
                 tweet.update({
                     'content': request.form['editTweet'],
+                    'time': dt
                 })
                 
                 datastore_client.put(tweet)
-                
-                return redirect(url_for('.root'))
-                
+
+                warningEdit = 2
+                            
         except ValueError as exc:
             error_message = str(exc)
-
-
+    
+    return redirect(url_for('.editTweetPage', id = id, warningEdit = warningEdit))        
 
 
 @app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])

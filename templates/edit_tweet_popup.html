@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Tweet</title>
+  </head>
+  <body>
+    {% for i in tweet %}
+    <form
+      id="form-edit-tweet"
+      class="form-edit"
+      action="/edit_tweet/{{ i['id'] }}"
+      method="post"
+    >
+      <h1>Edit tweet</h1>
+      <label for="editTweet"><b>Tweet</b></label>
+      <input
+        type="textfield"
+        placeholder="{{ i['content'] }}"
+        id="editTweet"
+        name="editTweet"
+        maxlength="280"
+      />
+      <button type="submit" class="btn">submit</button>
+    </form>
+    <p id="message_editTweet"></p>
+    <!-- display the message if fail to create taskboard-->
+    <script>
+      const searchParams = new URLSearchParams(window.location.search);
+      var warning = searchParams.get("warningEdit");
+      console.log(warning);
+      if (warning == 1)
+        document.getElementById("message_editTweet").innerHTML =
+          "You should input text.";
+      else if (warning == 2)
+        document.getElementById("message_editTweet").innerHTML =
+          "Tweet has been edited.";
+    </script>
+
+    {% endfor %}
+  </body>
+</html>

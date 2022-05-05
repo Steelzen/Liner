@@ -417,58 +417,35 @@
                 >
                   <strong class="mb-1"> {{ i['owner'] }} </strong>
                 </button>
+
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
-                  <button
-                    class="open-button"
-                    id="edit-tweet-button"
-                    onclick="openForm()"
-                  >
-                    edit
-                  </button></small
-                >
-                <div class="form-popup" id="edit_tweet">
                   <form
-                    class="form-edit"
-                    action="/edit_tweet/{{ i['id'] }}"
+                    class="edit-button"
+                    id="edit-tweet-button_{{ i['id'] }}"
+                    action="/edit_tweet_popup/{{ i['id'] }}"
                     method="post"
                   >
-                    <h1>Edit tweet</h1>
-
-                    <label for="editTweet"><b>Tweet</b></label>
-                    <input
-                      type="textfield"
-                      placeholder="{{ i['content'] }}"
-                      name="editTweet"
-                      required
-                    />
-
-                    <button type="submit" class="btn">submit</button>
-                    <button
-                      type="button"
-                      class="btn cancel"
-                      onclick="closeForm()"
-                    >
-                      Close
-                    </button>
+                    <button type="submit">edit</button>
                   </form>
-                </div>
+                </small>
                 <script>
-                  function openForm() {
-                    document.getElementById("edit_tweet").style.display =
-                      "block";
-                  }
-
-                  function closeForm() {
-                    document.getElementById("edit_tweet").style.display =
-                      "none";
-                  }
+                  $(document).ready(function () {
+                    $("#edit-tweet-button_{{ i['id'] }}").submit(function () {
+                      window.open(
+                        "",
+                        "formpopup",
+                        "width=400,height=400,resizeable,scrollbars"
+                      );
+                      this.target = "formpopup";
+                    });
+                  });
                 </script>
 
                 <small class="text-muted"
                   ><form
-                    class="active-task-form"
-                    id="delete_task"
+                    class="delete-button"
+                    id="delete_tweet_button_{{ i['id'] }}"
                     action="/delete_tweet/{{ i['id'] }}"
                     method="post"
                   >
