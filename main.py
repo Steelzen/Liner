@@ -462,98 +462,24 @@ def editTweet(id):
     return redirect(url_for('.editTweetPage', id = id, warningEdit = warningEdit))        
 
 
-@app.route('/delete_task/<int:task_board_id>/<int:task_id>', methods=['POST'])
-def deleteTask(task_board_id, task_id):
+@app.route('/delete_tweet/<int:id>', methods=['POST'])
+def deleteTweet(id):
     id_token = request.cookies.get("token")
     error_message = None
 
     if id_token:
         try:
-            task_board_key = datastore_client.key('TaskBoard', task_board_id)
-            task_key = datastore_client.key('Task', task_id, parent=task_board_key)
-            datastore_client.delete(task_key)
+            tweet_key = datastore_client.key('Tweet', id)
+            datastore_client.delete(tweet_key)
             
         except ValueError as exc:
             error_message = str(exc)
 
-    return redirect(url_for('.viewTaskBoard', id = task_board_id))
+    return redirect(url_for('.root'))
 
 
-@app.route('/edit_task/<int:task_board_id>/<int:task_id>', methods=['GET','POST'])
-def editTask(task_board_id, task_id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task2 = None
 
-    if id_token:
-        try:
-            titles=[]
-
-            task_board_key = datastore_client.key('TaskBoard', task_board_id)
-            query = datastore_client.query(kind="Task", ancestor=task_board_key)
-            task = query.fetch()
-
-            key = datastore_client.key('Task', task_id, parent=task_board_key)
-            task2 = datastore_client.get(key)
-
-            for i in task:
-                if not i['title'] == task2['title']:
-                    titles.append(i['title'])
-
-            if request.form['title'] == "":
-                warningTask = 1
-                return redirect(url_for('.editTaskPage', task_board_id = task_board_id, task_id = task_id, warningTask = warningTask))
-            elif request.form['title'] in titles:
-                warningTask = 2
-                return redirect(url_for('.editTaskPage', task_board_id = task_board_id, task_id = task_id, warningTask = warningTask))
-            else:
-                task2.update({
-                    'title': request.form['title'],
-                    'due_date': request.form['due_date'],
-                    'assigned_user': request.form['assign_user']
-                })
-                
-                datastore_client.put(task2)
-                
-                return redirect(url_for('.viewTaskBoard', id = task_board_id))
-                
-        except ValueError as exc:
-            error_message = str(exc)
-
-        
-@app.route('/edit_task_page/<int:task_board_id>/<int:task_id>', methods=['GET','POST'])
-def editTaskPage(task_board_id, task_id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task_board = None
-    task = None
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-
-            query = datastore_client.query(kind="TaskBoard")
-            query.add_filter('id', '=', task_board_id)
-            task_board = query.fetch()
-
-            task_board_key = datastore_client.key('TaskBoard', task_board_id)
-            query_task = datastore_client.query(kind="Task", ancestor=task_board_key)
-            query_task.add_filter('id', '=', task_id)
-            task = query_task.fetch()
-
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return render_template('edit_task.html', user_data=claims, error_message=error_message, 
-    user_info = user_info, task_board = task_board, task = task)            
-
-
+                  
 @app.route('/create_task/<int:id>', methods=['POST'])
 def addTaskToTaskBoard(id):
     id_token = request.cookies.get("token")

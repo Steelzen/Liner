@@ -342,20 +342,32 @@
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
                   <form
-                    class="active-task-form"
-                    id="edit_task"
-                    action="/edit_tweet/{{i['id']}}"
+                    class="edit-button"
+                    id="edit-tweet-button_{{ i['id'] }}"
+                    action="/edit_tweet_popup/{{ i['id'] }}"
                     method="post"
                   >
                     <button type="submit">edit</button>
-                  </form></small
-                >
+                  </form>
+                </small>
+                <script>
+                  $(document).ready(function () {
+                    $("#edit-tweet-button_{{ i['id'] }}").submit(function () {
+                      window.open(
+                        "",
+                        "formpopup",
+                        "width=400,height=150,resizeable,scrollbars"
+                      );
+                      this.target = "formpopup";
+                    });
+                  });
+                </script>
 
                 <small class="text-muted"
                   ><form
-                    class="active-task-form"
-                    id="delete_task"
-                    action="/delete_tweet/{{i['id']}}"
+                    class="delete-button"
+                    id="delete_tweet_button_{{ i['id'] }}"
+                    action="/delete_tweet/{{ i['id'] }}"
                     method="post"
                   >
                     <button type="submit">delete</button>
