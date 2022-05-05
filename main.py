@@ -376,8 +376,6 @@ def unfollowUser(username):
 
             following_list[:] = [x for x in following_list if not x == username]
 
-            print(following_list)
-
             user_info.update({
                 'following': following_list
                 })
@@ -466,152 +464,33 @@ def editTweet(id):
 def deleteTweet(id):
     id_token = request.cookies.get("token")
     error_message = None
+    claims = None
+    user_info = None
 
     if id_token:
         try:
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+
+            user_info = retrieveUserInfo(claims)
+            tweet_list = user_info['tweet_list']
+
             tweet_key = datastore_client.key('Tweet', id)
             datastore_client.delete(tweet_key)
+
+            tweet_list[:] = [x for x in tweet_list if not x == id]
+
+            user_info.update({
+                'tweet_list': tweet_list
+            })
+
+            datastore_client.put(user_info)
             
         except ValueError as exc:
             error_message = str(exc)
 
     return redirect(url_for('.root'))
 
-
-
-                  
-@app.route('/create_task/<int:id>', methods=['POST'])
-def addTaskToTaskBoard(id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task_board = None
-    warningTask = None
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-            titles=[]
-
-            task_board_key = datastore_client.key('TaskBoard', id)
-            query = datastore_client.query(kind="Task", ancestor=task_board_key)
-            task = query.fetch()
-
-            for i in task:
-                titles.append(i['title'])
-
-            if request.form['title'] == "":
-                warningTask = 1
-            elif request.form['title'] in titles:
-                warningTask = 2
-            else:
-                task_id = createTask(id, request.form['title'], request.form['due_date'], request.form['assign_user'])
-
-
-        except ValueError as exc:
-            error_message = str(exc)
-    
-    return redirect(url_for('.viewTaskBoard', id = id, warningTask = warningTask))
-
-
-
-@app.route('/rename_board/<int:id>', methods=['POST'])
-def renameTaskBoard(id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    warningRename = None
-    task_board_entity = None
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-            titles=[]
-
-            ancestor_key = datastore_client.key('User', claims['email'])
-            query = datastore_client.query(kind="TaskBoard", ancestor=ancestor_key)
-            task_board = query.fetch()
-
-            key = datastore_client.key('TaskBoard', id, parent = ancestor_key)
-            task_board_entity = datastore_client.get(key)
-
-            for i in task_board:
-                if not i['title'] == task_board_entity['title']:
-                    titles.append(i['title'])
-
-            if request.form['rename'] == "":
-                warningRename = 1
-            elif request.form['rename'] in titles:
-                warningRename = 2
-            else:
-                task_board_entity.update({
-                    'title': request.form['rename']
-                })
-
-                datastore_client.put(task_board_entity)
-                
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return redirect(url_for('.viewTaskBoard', id = id, warningRename = warningRename))
-
-
-
-@app.route('/invite_user/<int:id>', methods=['GET','POST'])
-def addUserToTaskBoard(id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task_board = None
-    warning = None
- 
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-            users=[]
-
-            query = datastore_client.query(kind="User")
-            email_list = query.fetch()
-            
-            ancestor_key = datastore_client.key('User', claims['email'])
-            entity_key = datastore_client.key('TaskBoard', id, parent = ancestor_key)
-            task_board = datastore_client.get(entity_key)
-            user_list = task_board['user']
-
-            for i in email_list:
-                users.append(i['email'])
-
-            if request.form['invite_user'] == "":
-                warning = 1
-            elif not request.form['invite_user'] in users:
-                warning = 2
-            elif request.form['invite_user'] in user_list:
-                warning = 3
-            elif request.form['invite_user'] == task_board['owner']:
-                warning = 4     
-            else:
-                user_list.append(request.form['invite_user'])
-                task_board.update({
-                    'user': user_list
-                    })                
-                datastore_client.put(task_board)
-
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return redirect(url_for('.viewTaskBoard', id = id, warning = warning))          
-
-
-
+          
 @app.route('/complete_task/<int:task_board_id>/<int:task_id>', methods=['GET','POST'])
 def completeTask(task_board_id, task_id):
     id_token = request.cookies.get("token")
@@ -641,79 +520,6 @@ def completeTask(task_board_id, task_id):
             error_message = str(exc)
 
     return redirect(url_for('.viewTaskBoard', id = task_board_id))  
-
-
-
-@app.route('/task_board/<int:id>', methods=['GET','POST'])
-def viewTaskBoard(id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task = None
-    task2 = None
-    task_board = None 
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-
-            query = datastore_client.query(kind="TaskBoard")
-            query.add_filter('id', '=', id)
-            task_board = query.fetch()
-
-            task_board_key = datastore_client.key('TaskBoard', id)
-            query_task = datastore_client.query(kind="Task", ancestor=task_board_key)
-            # query_task.order = ['-completion_time']
-            task = query_task.fetch()
-
-            task2 = query_task.fetch()    
-
-        except ValueError as exc:
-            error_message = str(exc)    
-            
-    return render_template('task_board.html', user_data=claims, error_message=error_message, 
-    user_info = user_info, task_board = task_board, task = task, task2 = task2)
-
-       
-
-
-@app.route('/create_task_board', methods=['POST'])
-def addTaskBoard():
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    warning = None
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-            titles=[]
-
-            ancestor_key = datastore_client.key('User', claims['email'])
-            query = datastore_client.query(kind="TaskBoard", ancestor=ancestor_key)
-            task_board = query.fetch() 
-
-            for i in task_board:
-                titles.append(i['title'])
-
-            if request.form['title'] == "":
-                warning = 1
-            elif request.form['title'] in titles:
-                warning = 2
-            else:
-                id = createTaskBoard(claims['email'], request.form['title'])
-
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return redirect(url_for('.root', warning = warning))
-
 
 
 @app.route('/')
