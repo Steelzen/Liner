@@ -101,6 +101,11 @@ body {
   font-family: "helvetica", sans-serif;
 }
 
+
+/* .list-group-item {
+  border-top: 1px solid;
+} */
+
 #message_cre, #message_inv, #message_task, #message_rename {
   color: red;
 }
