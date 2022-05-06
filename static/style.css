@@ -117,12 +117,6 @@ button {
 
 }
 
-#create-task-board {
-  padding: 0.1875rem 0.5rem;
-  margin-top: 0.125rem;
-  margin-left: 1.25rem;
-}
-
 .form-label {
   font-size: medium
 }
@@ -151,14 +145,6 @@ a, a:hover, a:focus, a:active {
   color: inherit;
 }
 
-.active-task-form {
-  display: inline;
-}
-
-#active-task-button {
- margin-left: 31rem;
-}
-
 .edit-user-info {
   display: inline;
 }
@@ -178,10 +164,6 @@ a, a:hover, a:focus, a:active {
   width: 60%;
 }
 
-#edit-task {
-  margin: 3rem;
-}
-
 .assign-user-edit {
   display: inline;
 }
@@ -189,10 +171,6 @@ a, a:hover, a:focus, a:active {
 #assign_user_edit {
   margin: 0.3em;
   width: 50%;
-}
-
-#message_task {
-  margin-left: 3em;
 }
 
 /*search box css start here*/
