@@ -40,7 +40,6 @@ def createTweet(username, content, time):
     id = random.getrandbits(63)
 
     entity_key = datastore_client.key('Tweet', id)
-    # entity_key = datastore_client.key('Tweet')
     entity = datastore.Entity(key = entity_key)
     entity.update({
         'id': id,

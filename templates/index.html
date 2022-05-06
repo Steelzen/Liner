@@ -397,7 +397,9 @@
             </a>
             {% for i in tweet %} {% if i['owner'] == user_info['username'] or
             i['owner'] in user_info['following'] %}
-            <a class="list-group-item list-group-item-action py-3 lh-tight">
+            <a
+              class="list-group list-group-flush border-bottom p-3 link-dark lh-tight"
+            >
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
               >
@@ -407,7 +409,6 @@
                 >
                   <strong class="mb-1"> {{ i['owner'] }} </strong>
                 </button>
-
                 {% if user_info['username'] == i['owner'] %}
                 <small class="text-muted">
                   <form
@@ -431,7 +432,6 @@
                     });
                   });
                 </script>
-
                 <small class="text-muted"
                   ><form
                     class="delete-button"
@@ -479,7 +479,7 @@
             {% if result_content == None %} {% for k in result_name %}
             <a
               href="/{{ k['username'] }}"
-              class="list-group-item list-group-item-action py-3 lh-tight"
+              class="list-group list-group-flush border-bottom p-3 link-dark lh-tight"
             >
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
@@ -491,7 +491,7 @@
             {% endfor %} {% else %} {% for k in result_content %}
             <a
               href="/{{ k['owner'] }}"
-              class="list-group-item list-group-item-action py-3 lh-tight"
+              class="list-group list-group-flush border-bottom p-3 link-dark lh-tight"
             >
               <div
                 class="d-flex w-100 align-items-center justify-content-between"
