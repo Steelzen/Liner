@@ -102,11 +102,7 @@ body {
 }
 
 
-/* .list-group-item {
-  border-top: 1px solid;
-} */
-
-#message_cre, #message_inv, #message_task, #message_rename {
+.message {
   color: red;
 }
 

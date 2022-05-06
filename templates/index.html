@@ -307,8 +307,8 @@
                 </ul>
               </div>
             </li>
-            <p id="message_editUser"></p>
-            <!-- display the message if fail to create taskboard-->
+            <p class="message" id="message_editUser"></p>
+            <!-- display the message if fail to input name-->
             <script>
               const searchParams = new URLSearchParams(window.location.search);
               var warning = searchParams.get("warning");
@@ -381,7 +381,7 @@
                     </ul>
                   </div>
                 </li>
-                <p id="message_addTweet"></p>
+                <p class="message" id="message_addTweet"></p>
                 <!-- display the message if fail to add tweet-->
                 <script>
                   const searchParamsTweet = new URLSearchParams(
@@ -463,7 +463,7 @@
             <span class="fs-5 fw-semibold">Search Result</span>
           </a>
           <div class="list-group list-group-flush border-bottom scrollarea">
-            <p id="message_noResult" hidden="true"></p>
+            <p class="message" id="message_noResult" hidden="true"></p>
             <script>
               const searchParamsNoResult = new URLSearchParams(
                 window.location.search
