@@ -286,17 +286,19 @@
                       <form action="/edit_user_profile" method="post">
                         <label for="profile" class="edit-user-info form-label">
                           Profile:
+                          <textarea
+                            name="profile"
+                            id="edit-user-profile"
+                            rows="5"
+                            cols="23"
+                            maxlength="280"
+                          ></textarea>
                         </label>
-                        <input
-                          type="textfield"
-                          name="profile"
-                          class="edit-user-info"
-                          id="edit-user-profile"
-                          maxlength="280"
-                        />
+                        <br />
                         <button
                           type="submit"
-                          class="edit-user-info link-dark rounded"
+                          class="link-dark rounded"
+                          id="profileEditButton"
                         >
                           submit
                         </button>

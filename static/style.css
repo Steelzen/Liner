@@ -145,14 +145,19 @@ a, a:hover, a:focus, a:active {
   color: inherit;
 }
 
+
+label textarea{
+  vertical-align: top;
+}
+
 .edit-user-info {
   display: inline;
 }
 
-#edit-user-profile{
+/* #edit-user-profile{
   width: 80%;
   height: fit-content;
-}
+} */
 
 #sign-out{
   background-color: #d2f4ea;
@@ -196,5 +201,15 @@ a, a:hover, a:focus, a:active {
   height: calc(3rem + 2px) !important;
   border-radius:0;
 }
+
+#editNameInProfile{
+  min-width: 21rem;
+}
+
+#profileEditButton {
+  margin-left: 13rem;
+}
+
+
 
 
