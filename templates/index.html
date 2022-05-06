@@ -316,28 +316,7 @@
                 document.getElementById("message_editUser").innerHTML =
                   "You should input name";
             </script>
-
             <li class="border-top my-3"></li>
-            <li class="mb-1">
-              <button
-                class="btn btn-toggle align-items-center rounded collapsed"
-                data-bs-toggle="collapse"
-                data-bs-target="#account-collapse"
-                aria-expanded="false"
-              >
-                Login Info
-              </button>
-              <div class="collapse" id="account-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <li class="login-info form-label">
-                    Name: {{ user_info['name'] }}
-                  </li>
-                  <li class="login-info form-label">
-                    Email: {{ user_info['email'] }}
-                  </li>
-                </ul>
-              </div>
-            </li>
           </ul>
         </div>
 
