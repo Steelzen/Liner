@@ -150,7 +150,7 @@
           <div class="list-group list-group-flush scrollarea">
             <ul class="list-unstyled ps-0" id="profileList">
               {% for i in user %}
-              <li class="mb-1">
+              <li class="mb-1" id="mb-1-profile">
                 <div class="account-info">
                   <h4>
                     <a href="/{{ i['username'] }}">{{ i['username'] }}</a>
@@ -170,7 +170,9 @@
                     action="/unfollow/{{i['username']}}"
                     method="post"
                   >
-                    <button type="submit" class="general-btn">Unfollow</button>
+                    <button type="submit" class="general-btn following-btn">
+                      Unfollow
+                    </button>
                   </form></small
                 >
 
@@ -182,7 +184,9 @@
                     action="/follow/{{i['username']}}"
                     method="post"
                   >
-                    <button type="submit" class="general-btn">Follow</button>
+                    <button type="submit" class="general-btn following-btn">
+                      Follow
+                    </button>
                   </form></small
                 >
                 {% endif %} {% endif %}
@@ -201,7 +205,10 @@
                   Edit user info
                 </button>
                 <div class="collapse" id="orders-collapse">
-                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <ul
+                    class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
+                    id="profile-edit-nav"
+                  >
                     <li>
                       <div id="edit-user-name">
                         <form action="/edit_user_name" method="post">

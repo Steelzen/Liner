@@ -163,29 +163,43 @@
 
     <div id="login-info" hidden="true">
       {% if user_data %} {% if user_info['username'] == None %}
-      <form action="/input_username" method="post">
-        <label for="username" class="username-form form-label">
-          Username(*):
-        </label>
-        <input
-          type="text"
-          name="username"
-          class="username-form"
-          maxlength="280"
-        />
-        <label for="displayname" class="username-form form-label">
-          Displayname(First name & Last name):
-        </label>
-        <input
-          type="text"
-          name="displayname"
-          class="username-form"
-          maxlength="280"
-        />
-        <button type="submit" class="username-form link-dark rounded">
-          Enter
-        </button>
-      </form>
+      <div id="username-input-form-wrap">
+        <h4 class="form-title">You are first time visit</h4>
+        <form id="username-input-form" action="/input_username" method="post">
+          <div class="row mb-3">
+            <label for="username" class="col-sm-2 col-form-label"
+              >Username(*)</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                id="inputEmail3"
+                maxlength="280"
+              />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="displayname" class="col-sm-2 col-form-label"
+              >Displayname</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                name="displayname"
+                placeholder="First name & Last name"
+                class="form-control"
+                id="inputPassword3"
+                maxlength="280"
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-enter">
+            Enter
+          </button>
+        </form>
+      </div>
       <p id="message_username"></p>
       <!-- display the message if fail to enter username-->
       <script>
@@ -203,10 +217,8 @@
           document.getElementById("message_username").innerHTML =
             "You can not use this username";
       </script>
-
       {% else %}
       <br />
-
       <main>
         <div
           class="flex-shrink-0 p-3 bg-white"
@@ -449,7 +461,9 @@
                 </small>
                 {% endif %}
               </div>
-              <div class="col-10 mb-1 small">{{ i['content'] }}</div>
+              <div class="col-10 mb-1 small" id="col-10-index">
+                {{ i['content'] }}
+              </div>
             </a>
             {% endif %} {% endfor %}
           </div>
