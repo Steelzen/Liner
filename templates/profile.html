@@ -68,98 +68,72 @@
           d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"
         ></path>
       </symbol>
-      <symbol
-        id="card-list"
-        width="25"
-        height="30"
-        fill="currentColor"
-        class="bi bi-card-list"
-        viewBox="0 0 16 19"
-      >
-        <path
-          d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"
-        />
-        <path
-          d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"
-        />
-      </symbol>
-      <symbol
-        id="list"
-        width="25"
-        height="30"
-        fill="currentColor"
-        class="bi bi-card-list"
-        viewBox="0 0 16 19"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-        />
-      </symbol>
     </svg>
 
     <div id="app-title">
       <a href="/" id="linerTitle">
         <h1>Liner</h1>
       </a>
+
+      <section class="search-sec" id="search-pad" hidden="true">
+        <form
+          action="/search_by"
+          method="post"
+          id="search"
+          novalidate="novalidate"
+          onsubmit="validate()"
+        >
+          <input
+            type="text"
+            name="search-by-option"
+            class="form-control search-slt liner-search"
+            id="searchText"
+            placeholder="Enter Search"
+          />
+          <select
+            name="search-by"
+            id="search-by-profile"
+            class="form-control search-slt liner-search"
+          >
+            <option value="username">Username</option>
+            <option value="content">Content</option>
+          </select>
+
+          <button type="submit" class="btn btn-danger wrn-btn">Search</button>
+        </form>
+        <script>
+          function validate() {
+            var formId = document.getElementById("search");
+            var allInputs = formId.getElementsByTagName("input");
+            var input, i;
+
+            for (i = 0; (input = allInputs[i]); i++) {
+              if (input.value == null || input.value == "") {
+                input.value = "#%null#%";
+              }
+            }
+          }
+        </script>
+      </section>
+
+      <a href="/">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="30"
+          fill="currentColor"
+          class="bi bi-house-door"
+          id="home"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"
+          />
+        </svg>
+      </a>
       <button id="sign-out" hidden="true" class="link-dark rounded">
         Sign out
       </button>
-
-      <section class="search-sec" id="search-pad" hidden="true">
-        <div class="container">
-          <form
-            action="/search_by"
-            method="post"
-            id="search"
-            novalidate="novalidate"
-            onsubmit="validate()"
-          >
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="row">
-                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <input
-                      type="text"
-                      name="search-by-option"
-                      class="form-control search-slt"
-                      placeholder="Enter Search"
-                    />
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select
-                      name="search-by"
-                      id="search-by"
-                      class="form-control search-slt"
-                    >
-                      <option value="username">Username</option>
-                      <option value="content">Content</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <button type="submit" class="btn btn-danger wrn-btn">
-                      Search
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-          <script>
-            function validate() {
-              var formId = document.getElementById("search");
-              var allInputs = formId.getElementsByTagName("input");
-              var input, i;
-
-              for (i = 0; (input = allInputs[i]); i++) {
-                if (input.value == null || input.value == "") {
-                  input.value = "#%null#%";
-                }
-              }
-            }
-          </script>
-        </div>
-      </section>
     </div>
 
     <div id="firebase-auth-container"></div>
@@ -168,7 +142,6 @@
       {% if user_data %}
 
       <main>
-        <!-- <div class="b-example-divider"></div> -->
         <div
           class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
           id="profileWrap"
@@ -366,14 +339,11 @@
             {% endfor %}
           </div>
         </div>
-        <!-- <div class="b-example-divider"></div> -->
       </main>
       {% elif error_message %}
       <p>Error Message: {{ error_message }}</p>
       {% endif %}
     </div>
-
-    <!-- <button id="sign-out" hidden="true">Sign out</button> -->
 
     <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>

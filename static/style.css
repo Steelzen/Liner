@@ -1,6 +1,7 @@
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  background-color: rgb(247, 244, 244);
 }
 
 html {
@@ -16,6 +17,10 @@ main {
   overflow-x: auto;
   overflow-y: hidden;
   justify-content: center;
+}
+
+#profileSection{
+  margin-right: 14px;
 }
 
 /* Responsive layout - makes a one column layout instead of a two-column layout */
@@ -105,8 +110,9 @@ body {
   font-family: "helvetica", sans-serif;
 }
 
+
 textarea, input {
-  border-color: #ccc;
+  border-color: rgb(218, 216, 216);
 }
 
 #profileWrap{
@@ -117,7 +123,6 @@ textarea, input {
   margin: 0;
 }
 
-
 .message {
   color: red;
 }
@@ -126,6 +131,7 @@ button {
   border-color: transparent;
   margin: 0.5em;
 }
+
 
 .non-style-button {
   background-color: transparent;
@@ -151,10 +157,14 @@ button {
   display: flex;
   min-height: 4rem;
   border-bottom: 1px solid gray;
+  align-items: center; 
+  justify-content: center;
+  background-color: white;
 }
 
-#linerTitle{
-  font-family: 'Brush Script MT', cursive;
+#app-title > a, section {
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 @media (max-width: 800px) {
@@ -169,7 +179,6 @@ a, a:hover, a:focus, a:active {
   color: inherit;
 }
 
-
 label textarea{
   vertical-align: top;
 }
@@ -177,12 +186,6 @@ label textarea{
 .edit-user-info {
   display: inline;
 }
-
-/* #edit-user-profile{
-  width: 80%;
-  height: fit-content;
-} */
-
 
 #sign-out{
   background-color: #d2f4ea;
@@ -212,29 +215,6 @@ label textarea{
   width: 50%;
 }
 
-/*search box css start here*/
-.search-sec{
-  padding-top: 0.5rem;
-}
-.search-slt{
-  display: block;
-  width: 100%;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #ccc;
-  height: calc(3rem + 2px) !important;
-  border-radius:0;
-}
-.wrn-btn{
-  width: 100%;
-  font-size: 16px;
-  font-weight: 400;
-  text-transform: capitalize;
-  height: calc(3rem + 2px) !important;
-  border-radius:0;
-}
 
 #editNameInProfile{
   min-width: 21rem;
@@ -243,6 +223,34 @@ label textarea{
 #profileEditButton {
   margin-left: 13rem;
 }
+
+#search{
+  display: flex;
+  align-items: center;
+}
+
+.liner-search{
+  height: 2rem;
+}
+
+#searchText{
+  width: 18rem;
+  margin-right: 2px;
+}
+
+#search-by{
+  width: 10rem;
+}
+
+#search-by-profile{
+  height: 2rem;
+  width: 10rem;
+}
+
+#linerTitle{
+  font-family: 'Brush Script MT', cursive;
+}
+
 
 
 
