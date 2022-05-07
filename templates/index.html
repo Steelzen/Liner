@@ -391,9 +391,7 @@
             <a
               class="list-group list-group-flush border-bottom p-3 link-dark lh-tight"
             >
-              <div
-                class="d-flex w-100 align-items-center justify-content-between"
-              >
+              <div class="d-flex w-100 align-items-center">
                 <button
                   class="non-style-button"
                   onclick="document.location=`/{{ i['owner'] }}`"
@@ -436,8 +434,8 @@
                     });
                   });
                 </script>
-                <small class="text-muted"
-                  ><form
+                <small class="text-muted">
+                  <form
                     class="delete-button"
                     id="delete_tweet_button_{{ i['id'] }}"
                     action="/delete_tweet/{{ i['id'] }}"
@@ -446,8 +444,8 @@
                     <button type="submit" class="general-btn link-dark rounded">
                       Delete
                     </button>
-                  </form></small
-                >
+                  </form>
+                </small>
                 {% endif %}
               </div>
               <div class="col-10 mb-1 small">{{ i['content'] }}</div>

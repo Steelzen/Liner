@@ -171,156 +171,140 @@
         <!-- <div class="b-example-divider"></div> -->
         <div
           class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
+          id="profileWrap"
           style="width: 40em"
         >
-          <a
-            class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
-          >
-            <svg class="bi me-2" width="30" height="24">
-              <use xlink:href="#card-list" />
-            </svg>
-            <span class="fs-5 fw-semibold">Time Line</span>
-          </a>
-          <div class="list-group list-group-flush border-bottom scrollarea">
-            <a
-              class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
-            >
-              <ul class="list-unstyled ps-0">
-                {% for i in user %}
-                <li class="mb-1">
-                  <div class="account-info">
-                    <h4>
-                      <a href="/{{ i['username'] }}">{{ i['username'] }}</a>
-                    </h4>
-                    Name: {{ i['name'] }}<br />
-                    Email: {{ i['email'] }} <br />
-                    Profile: {{ i['profile'] }} <br />
-                  </div>
-                </li>
-                <div class="follow-btn">
-                  {% if user_info['username'] != i['username'] %} {% if
-                  user_info['username'] in i['follower'] %}
-                  <small class="text-muted"
-                    ><form
-                      class="active-task-form"
-                      id="btn-unfollow"
-                      action="/unfollow/{{i['username']}}"
-                      method="post"
-                    >
-                      <button type="submit" class="general-btn">
-                        Unfollow
-                      </button>
-                    </form></small
-                  >
-
-                  {% else %}
-                  <small class="text-muted">
-                    <form
-                      class="active-task-form"
-                      id="btn-follow"
-                      action="/follow/{{i['username']}}"
-                      method="post"
-                    >
-                      <button type="submit" class="general-btn">Follow</button>
-                    </form></small
-                  >
-                  {% endif %} {% endif %}
+          <div class="list-group list-group-flush scrollarea">
+            <ul class="list-unstyled ps-0" id="profileList">
+              {% for i in user %}
+              <li class="mb-1">
+                <div class="account-info">
+                  <h4>
+                    <a href="/{{ i['username'] }}">{{ i['username'] }}</a>
+                  </h4>
+                  Name: {{ i['name'] }}<br />
+                  Email: {{ i['email'] }} <br />
+                  Profile: {{ i['profile'] }} <br />
                 </div>
-
-                <li class="border-top my-3"></li>
-
-                {% if user_info['username'] == i['username'] %}
-                <li class="mb-1">
-                  <button
-                    class="btn btn-toggle align-items-center rounded collapsed"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#orders-collapse"
-                    aria-expanded="false"
+              </li>
+              <div class="follow-btn">
+                {% if user_info['username'] != i['username'] %} {% if
+                user_info['username'] in i['follower'] %}
+                <small class="text-muted"
+                  ><form
+                    class="active-task-form"
+                    id="btn-unfollow"
+                    action="/unfollow/{{i['username']}}"
+                    method="post"
                   >
-                    Edit user info
-                  </button>
-                  <div class="collapse" id="orders-collapse">
-                    <ul
-                      class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
-                    >
-                      <li>
-                        <div id="edit-user-name">
-                          <form action="/edit_user_name" method="post">
-                            <label for="name" class="edit-user-info form-label">
-                              Name:
-                            </label>
-                            <input
-                              type="text"
-                              name="name"
-                              class="edit-user-info"
-                              id="editNameInProfile"
-                              maxlength="280"
-                            />
-                            <button
-                              type="submit"
-                              class="edit-user-info general-btn link-dark rounded"
-                            >
-                              Submit
-                            </button>
-                          </form>
-                          <br />
-                        </div>
-                      </li>
-                      <li>
-                        <div id="edit-user-profile">
-                          <form action="/edit_user_profile" method="post">
-                            <label
-                              for="profile"
-                              class="edit-user-info form-label"
-                            >
-                              Profile:
-                              <textarea
-                                name="profile"
-                                id="edit-user-profile"
-                                rows="5"
-                                cols="39"
-                                maxlength="280"
-                              ></textarea>
-                            </label>
-                            <button
-                              type="submit"
-                              class="edit-user-info general-btn link-dark rounded"
-                            >
-                              Submit
-                            </button>
-                          </form>
-                          <br />
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <p class="message" id="message_editUser"></p>
-                <!-- display the message if fail to create taskboard-->
-                <script>
-                  const searchParams = new URLSearchParams(
-                    window.location.search
-                  );
-                  var warning = searchParams.get("warning");
-                  console.log(warning);
-                  if (warning == 1)
-                    document.getElementById("message_editUser").innerHTML =
-                      "You should input name";
-                </script>
-                <!-- edit user data -->
+                    <button type="submit" class="general-btn">Unfollow</button>
+                  </form></small
+                >
 
-                <li class="border-top my-3"></li>
-                {% endif %} {% endfor %}
-                <!-- endif for profile owner -->
-              </ul>
-            </a>
+                {% else %}
+                <small class="text-muted">
+                  <form
+                    class="active-task-form"
+                    id="btn-follow"
+                    action="/follow/{{i['username']}}"
+                    method="post"
+                  >
+                    <button type="submit" class="general-btn">Follow</button>
+                  </form></small
+                >
+                {% endif %} {% endif %}
+              </div>
+
+              <li class="border-top my-3"></li>
+
+              {% if user_info['username'] == i['username'] %}
+              <li class="mb-1">
+                <button
+                  class="btn btn-toggle align-items-center rounded collapsed"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#orders-collapse"
+                  aria-expanded="false"
+                >
+                  Edit user info
+                </button>
+                <div class="collapse" id="orders-collapse">
+                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li>
+                      <div id="edit-user-name">
+                        <form action="/edit_user_name" method="post">
+                          <label for="name" class="edit-user-info form-label">
+                            Name:
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            class="edit-user-info"
+                            id="editNameInProfile"
+                            maxlength="280"
+                          />
+                          <button
+                            type="submit"
+                            class="edit-user-info general-btn link-dark rounded"
+                          >
+                            Submit
+                          </button>
+                        </form>
+                        <br />
+                      </div>
+                    </li>
+                    <li>
+                      <div id="edit-user-profile">
+                        <form action="/edit_user_profile" method="post">
+                          <label
+                            for="profile"
+                            class="edit-user-info form-label"
+                          >
+                            Profile:
+                            <textarea
+                              name="profile"
+                              id="edit-user-profile"
+                              rows="5"
+                              cols="39"
+                              maxlength="280"
+                            ></textarea>
+                          </label>
+                          <button
+                            type="submit"
+                            class="edit-user-info general-btn link-dark rounded"
+                          >
+                            Submit
+                          </button>
+                        </form>
+                        <br />
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <p class="message" id="message_editUser"></p>
+              <!-- display the message if fail to edit name-->
+              <script>
+                const searchParams = new URLSearchParams(
+                  window.location.search
+                );
+                var warning = searchParams.get("warning");
+                console.log(warning);
+                if (warning == 1)
+                  document.getElementById("message_editUser").innerHTML =
+                    "You should input name";
+              </script>
+              <!-- edit user data -->
+
+              <li class="border-top my-3"></li>
+              {% endif %} {% endfor %}
+              <!-- endif for profile owner -->
+            </ul>
+
             {% for i in tweet %}
             <a
               class="list-group list-group-flush border-bottom p-3 link-dark lh-tight"
             >
-              <div
-                class="d-flex w-100 align-items-center justify-content-between"
-              >
+              <div class="d-flex w-100 align-items-center">
                 <button
                   class="non-style-button"
                   onclick="document.location=`/{{ i['owner'] }}`"

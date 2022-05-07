@@ -96,9 +96,25 @@ main {
 .fw-semibold { font-weight: 600; }
 .lh-tight { line-height: 1.25; }
 
+.text-muted{
+  display: inline;
+}
+
 
 body {
   font-family: "helvetica", sans-serif;
+}
+
+textarea, input {
+  border-color: #ccc;
+}
+
+#profileWrap{
+  margin-top: 30px
+}
+
+#profileList{
+  margin: 0;
 }
 
 

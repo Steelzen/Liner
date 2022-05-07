@@ -295,7 +295,6 @@ def viewProfile(username):
             query_tweet.add_filter('time', '>', 0)
             query_tweet.order = ['-time']
             tweet = query_tweet.fetch(limit=50)
-
    
         except ValueError as exc:
             error_message = str(exc)    
