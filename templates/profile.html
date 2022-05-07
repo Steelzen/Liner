@@ -69,18 +69,6 @@
         ></path>
       </symbol>
       <symbol
-        id="briefcase"
-        width="25"
-        height="30"
-        fill="currentColor"
-        class="bi bi-briefcase"
-        viewBox="0 0 16 19"
-      >
-        <path
-          d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"
-        />
-      </symbol>
-      <symbol
         id="card-list"
         width="25"
         height="30"
@@ -111,10 +99,8 @@
     </svg>
 
     <div id="app-title">
-      <a href="/">
-        <svg class="bi me-2" width="30" height="24">
-          <use xlink:href="#briefcase" /></svg
-        >Liner
+      <a href="/" id="linerTitle">
+        <h1>Liner</h1>
       </a>
       <button id="sign-out" hidden="true" class="link-dark rounded">
         Sign out
@@ -221,7 +207,9 @@
                       action="/unfollow/{{i['username']}}"
                       method="post"
                     >
-                      <button type="submit">unfollow</button>
+                      <button type="submit" class="general-btn">
+                        Unfollow
+                      </button>
                     </form></small
                   >
 
@@ -233,7 +221,7 @@
                       action="/follow/{{i['username']}}"
                       method="post"
                     >
-                      <button type="submit">follow</button>
+                      <button type="submit" class="general-btn">Follow</button>
                     </form></small
                   >
                   {% endif %} {% endif %}
@@ -270,9 +258,9 @@
                             />
                             <button
                               type="submit"
-                              class="edit-user-info link-dark rounded"
+                              class="edit-user-info general-btn link-dark rounded"
                             >
-                              submit
+                              Submit
                             </button>
                           </form>
                           <br />
@@ -296,9 +284,9 @@
                             </label>
                             <button
                               type="submit"
-                              class="edit-user-info link-dark rounded"
+                              class="edit-user-info general-btn link-dark rounded"
                             >
-                              submit
+                              Submit
                             </button>
                           </form>
                           <br />
@@ -347,16 +335,29 @@
                     action="/edit_tweet_popup/{{ i['id'] }}"
                     method="post"
                   >
-                    <button type="submit">edit</button>
+                    <button type="submit" class="general-btn link-dark rounded">
+                      Edit
+                    </button>
                   </form>
                 </small>
                 <script>
                   $(document).ready(function () {
                     $("#edit-tweet-button_{{ i['id'] }}").submit(function () {
+                      var width = 500;
+                      var height = 300;
+                      var toppx = $(window).height() / 2 - height / 2;
+                      var leftpx = $(window).width() / 2 - width / 2;
                       window.open(
                         "",
                         "formpopup",
-                        "width=400,height=150,resizeable,scrollbars"
+                        "width=" +
+                          width +
+                          ",height=" +
+                          height +
+                          ",scrollbars=no,left=" +
+                          leftpx +
+                          "top=" +
+                          toppx
                       );
                       this.target = "formpopup";
                     });
@@ -369,7 +370,9 @@
                     action="/delete_tweet/{{ i['id'] }}"
                     method="post"
                   >
-                    <button type="submit">delete</button>
+                    <button type="submit" class="general-btn link-dark rounded">
+                      Delete
+                    </button>
                   </form></small
                 >
                 {% endif %}

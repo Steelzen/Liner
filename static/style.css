@@ -108,13 +108,17 @@ body {
 
 button {
   border-color: transparent;
-  background-color: rgb(222, 224, 228);
   margin: 0.5em;
 }
 
 .non-style-button {
   background-color: transparent;
 
+}
+
+.general-btn{
+  background-color: rgb(153, 179, 232);
+  color: white;
 }
 
 .form-label {
@@ -131,6 +135,10 @@ button {
   display: flex;
   min-height: 4rem;
   border-bottom: 1px solid gray;
+}
+
+#linerTitle{
+  font-family: 'Brush Script MT', cursive;
 }
 
 @media (max-width: 800px) {
@@ -159,10 +167,20 @@ label textarea{
   height: fit-content;
 } */
 
+
 #sign-out{
   background-color: #d2f4ea;
   width: 5rem;
   max-height: 2rem;
+}
+
+#create_tweet{
+  margin-top: 1em;
+  margin-left: 3em;
+}
+
+#tweetUploadButton{
+  margin-left: 26em;
 }
 
 #assign_user {
