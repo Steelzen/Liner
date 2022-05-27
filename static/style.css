@@ -13,7 +13,7 @@ main {
   flex-wrap: nowrap;
   height: 100vh;
   height: -webkit-fill-available;
-  max-height: 200vh;
+  max-height: 500vh;
   overflow-x: auto;
   overflow-y: hidden;
   justify-content: center;
@@ -21,12 +21,22 @@ main {
 
 #profileSection{
   margin-right: 14px;
+  margin-bottom: 14px;
+}
+
+.timeline-section {
+  margin-bottom: 14px;
 }
 
 /* Responsive layout - makes a one column layout instead of a two-column layout */
 @media (max-width: 800px) {
   main {
     flex-direction: column;
+    justify-content: center;
+  }
+
+  #profileSection{
+    justify-content: center;
   }
 }
 
@@ -127,9 +137,6 @@ textarea, input {
   /* border-radius: 1%; */
 }
 
-/* #username-input-form{
-  justify-items: center;
-} */
 
 .col-sm-10{
   width: 20rem;
@@ -183,6 +190,8 @@ textarea, input {
 
 .message {
   color: red;
+  margin-top: 1em;
+  text-align: center;
 }
 
 button {
@@ -279,7 +288,7 @@ label textarea{
 }
 
 #profileEditButton {
-  margin-left: 13rem;
+  margin-left: 14rem;
 }
 
 #search{
@@ -308,6 +317,58 @@ label textarea{
 #linerTitle{
   font-family: 'Brush Script MT', cursive;
 }
+
+#file-choose{
+  margin-top: 2em;
+}
+
+#edit-profile-in-profilepage{
+  margin-left: 1.2em;
+}
+
+.post-img{
+  margin-bottom: 1em;
+}
+
+/** Styling file choose button */
+.inputfile + label svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: currentColor;
+  margin-top: -0.25em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+}
+
+.inputfile {
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 1.25em;
+  font-weight: 500;
+  color: #f1e5e6;
+  background-color: #d3394c;
+  display: inline-block;
+  }
+
+  .inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.file-span{
+  margin-right: 0.25em;
+}
+
 
 
 

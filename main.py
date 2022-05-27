@@ -1,18 +1,23 @@
-#GCD GitLab repository: https://gitlab.griffith.ie/taehyung.kwon/cpa_assignment3
 import datetime
 import random
 import shlex
-from flask import Flask, render_template, request, redirect
+import local_constants
+import blob_storage
+from flask import Flask, render_template, request, redirect, Response
 from flask import session, url_for
 from google.cloud import datastore
+from google.cloud import storage
 import google.oauth2.id_token
 from google.auth.transport import requests
+import os
 
 app = Flask(__name__)
 
 datastore_client = datastore.Client()
 
 firebase_request_adapter = requests.Request()
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "liner-351503-d0f71f6b8875.json"
 
 
 def retrieveUserInfo(claims):
@@ -35,6 +40,7 @@ def createUserInfo(claims):
     })
 
     datastore_client.put(entity)
+
 
 def createTweet(username, content, time):
     id = random.getrandbits(63)
@@ -149,6 +155,7 @@ def editUserProfile():
     return redirect(url_for('.root'))  
 
 
+
 @app.route('/upload_tweet', methods=['POST'])
 def addTweet():
     id_token = request.cookies.get("token")
@@ -156,6 +163,9 @@ def addTweet():
     claims = None
     user_info = None
     warningUpload = None
+    tweet = None
+    image = []
+    file_list = []
     user = None
 
     if id_token:
@@ -166,17 +176,39 @@ def addTweet():
 
             dt = datetime.datetime.now()
 
-            tweet_list = user_info['tweet_list'] 
+            tweet_list = user_info['tweet_list']
 
+            blob_list = blob_storage.blobList(None) 
+            for i in blob_list:
+                file_list.append(i.name) 
+
+            file = request.files['file_name']
+            if file.filename == '':
+                image = []
+            else: 
+                blob_storage.addFile(file)
+                image.append(file.filename)
+    
             if request.form['content'] == "":
                 warningUpload = 1
+            elif file.filename in file_list:
+                warningUpload = 2
+                redirect('/')    
             else:
                 id = createTweet(user_info['username'], request.form['content'], dt)
+
                 tweet_list.append(id)
                 user_info.update({
                     'tweet_list': tweet_list
                 })
                 datastore_client.put(user_info)
+
+                tweet_key = datastore_client.key('Tweet', id)
+                tweet = datastore_client.get(tweet_key)
+                tweet.update({
+                    'image': image
+                })
+                datastore_client.put(tweet)
 
         except ValueError as exc:
             error_message = str(exc)
@@ -267,7 +299,6 @@ def rootSearch(search_by, text):
 
     return render_template('index.html', user_data=claims, error_message=error_message, 
     user_info = user_info, user = user, result_name = result_name, result_content = result_content, is_search = is_search)
-
 
 
 @app.route('/<username>', methods=['GET','POST'])
@@ -417,7 +448,6 @@ def editTweetPage(id):
             query.add_filter('id', '=', id)
             tweet = query.fetch()
 
-
         except ValueError as exc:
             error_message = str(exc)    
 
@@ -464,6 +494,8 @@ def deleteTweet(id):
     error_message = None
     claims = None
     user_info = None
+    tweet = None
+    image_list = []
 
     if id_token:
         try:
@@ -471,6 +503,15 @@ def deleteTweet(id):
 
             user_info = retrieveUserInfo(claims)
             tweet_list = user_info['tweet_list']
+
+            query = datastore_client.query(kind="Tweet")
+            query.add_filter('id', '=', id)
+            tweet = query.fetch()
+
+            for i in tweet:
+                image_list = i['image']
+            for k in image_list:
+                blob_storage.delete_blob(k)   
 
             tweet_key = datastore_client.key('Tweet', id)
             datastore_client.delete(tweet_key)
@@ -488,38 +529,7 @@ def deleteTweet(id):
 
     return redirect(url_for('.root'))
 
-          
-@app.route('/complete_task/<int:task_board_id>/<int:task_id>', methods=['GET','POST'])
-def completeTask(task_board_id, task_id):
-    id_token = request.cookies.get("token")
-    error_message = None
-    claims = None
-    user_info = None
-    task = None
-
-    if id_token:
-        try:
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-
-            user_info = retrieveUserInfo(claims)
-
-            dt = datetime.datetime.now()
-
-            ancestor_key = datastore_client.key('TaskBoard', task_board_id)
-            task_key = datastore_client.key('Task', task_id, parent = ancestor_key)
-            task = datastore_client.get(key=task_key)
-            task.update({
-                'is_complete': True,
-                'completion_time': dt
-            })
-            datastore_client.put(task)
-  
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return redirect(url_for('.viewTaskBoard', id = task_board_id))  
-
-
+      
 @app.route('/')
 def root():
     id_token = request.cookies.get("token")
@@ -548,8 +558,7 @@ def root():
                 query_tweet = datastore_client.query(kind="Tweet")
                 query_tweet.order = ['-time']
                 tweet = query_tweet.fetch(limit=50)
-  
-    
+                                
         except ValueError as exc:
             error_message = str(exc)
 

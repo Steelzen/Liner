@@ -231,8 +231,9 @@
             <svg class="bi me-2" width="30" height="24">
               <use xlink:href="#list" />
             </svg>
-            <span class="fs-5 fw-semibold">User Info</span>
+            <span class="fs-5 fw-semibold">Profile</span>
           </a>
+
           <ul class="list-unstyled ps-0">
             {% for i in user %}
             <li class="mb-1">
@@ -242,10 +243,10 @@
                 </h4>
                 Name: {{ i['name'] }}<br />
                 Email: {{ i['email'] }} <br />
-                Profile: {{ i['profile'] }} <br />
+                Bio: {{ i['profile'] }} <br />
               </div>
             </li>
-            {% endfor %}
+
             <li class="border-top my-3"></li>
             <li class="mb-1">
               <button
@@ -254,7 +255,7 @@
                 data-bs-target="#orders-collapse"
                 aria-expanded="false"
               >
-                Edit user info
+                Edit Profile
               </button>
               <div class="collapse" id="orders-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -269,6 +270,7 @@
                           name="name"
                           class="edit-user-info"
                           maxlength="280"
+                          placeholder="{{ i['name'] }}"
                         />
                         <button
                           type="submit"
@@ -284,13 +286,14 @@
                     <div id="edit-user-profile">
                       <form action="/edit_user_profile" method="post">
                         <label for="profile" class="edit-user-info form-label">
-                          Profile:
+                          Bio:
                           <textarea
                             name="profile"
                             id="edit-user-profile"
                             rows="5"
-                            cols="23"
+                            cols="28"
                             maxlength="280"
+                            placeholder="{{ i['profile'] }}"
                           ></textarea>
                         </label>
                         <br />
@@ -305,6 +308,7 @@
                       <br />
                     </div>
                   </li>
+                  {% endfor %}
                 </ul>
               </div>
             </li>
@@ -322,10 +326,9 @@
           </ul>
         </div>
 
-        <!-- <div class="b-example-divider"></div> -->
         {% if is_search == 0 %}
         <div
-          class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
+          class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white timeline-section"
           style="width: 40em"
         >
           <a
@@ -348,7 +351,7 @@
                     data-bs-target="#createTweet-collapse"
                     aria-expanded="false"
                   >
-                    Upload Tweet
+                    New Post
                   </button>
                   <div class="collapse" id="createTweet-collapse">
                     <ul
@@ -356,27 +359,82 @@
                     >
                       <li>
                         <div id="create_tweet">
-                          <form action="/upload_tweet" method="post">
-                            <label
-                              for="content"
-                              class="edit-user-info form-label"
-                            >
-                              Tweet
-                              <textarea
-                                name="content"
-                                class="edit-user-info"
-                                rows="5"
-                                cols="40"
-                                maxlength="280"
-                              ></textarea>
-                            </label>
+                          <form
+                            action="/upload_tweet"
+                            method="post"
+                            enctype="multipart/form-data"
+                          >
+                            <textarea
+                              name="content"
+                              class="edit-user-info"
+                              rows="5"
+                              cols="55"
+                              maxlength="280"
+                              placeholder="Write a caption..."
+                            ></textarea>
                             <br />
+                            <input
+                              type="file"
+                              name="file_name"
+                              id="file-choose"
+                              class="inputfile"
+                              accept="image/*"
+                              data-multiple-caption="{count} files selected"
+                              multiple
+                            />
+                            <label for="file-choose">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="17"
+                                viewBox="0 0 20 17"
+                              >
+                                <path
+                                  d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
+                                ></path>
+                              </svg>
+                              <span class="file-span">Choose Image</span></label
+                            >
+                            <script>
+                              var inputs =
+                                document.querySelectorAll(".inputfile");
+                              Array.prototype.forEach.call(
+                                inputs,
+                                function (input) {
+                                  var label = input.nextElementSibling,
+                                    labelVal = label.innerHTML;
+
+                                  input.addEventListener(
+                                    "change",
+                                    function (e) {
+                                      var fileName = "";
+                                      if (this.files && this.files.length > 1)
+                                        fileName = (
+                                          this.getAttribute(
+                                            "data-multiple-caption"
+                                          ) || ""
+                                        ).replace("{count}", this.files.length);
+                                      else
+                                        fileName = e.target.value
+                                          .split("\\")
+                                          .pop();
+
+                                      if (fileName)
+                                        label.querySelector("span").innerHTML =
+                                          fileName;
+                                      else label.innerHTML = labelVal;
+                                    }
+                                  );
+                                }
+                              );
+                            </script>
+
                             <button
                               type="submit"
                               class="edit-user-info general-btn link-dark rounded"
                               id="tweetUploadButton"
                             >
-                              Submit
+                              Share
                             </button>
                           </form>
                           <br />
@@ -396,6 +454,9 @@
                   if (warningUpload == 1)
                     document.getElementById("message_addTweet").innerHTML =
                       "You should input content";
+                  else if (warningUpload == 2)
+                    document.getElementById("message_addTweet").innerHTML =
+                      "Image file name exists already";
                 </script>
               </ul>
             </a>
@@ -462,6 +523,16 @@
                 {% endif %}
               </div>
               <div class="col-10 mb-1 small" id="col-10-index">
+                {% for k in i['image'] %}
+                <img
+                  src="https://storage.cloud.google.com/assignment3-348404.appspot.com/{{
+                k }}"
+                  style="width: 100%"
+                  onerror='this.style.display = "none"'
+                  class="post-img"
+                />
+                {% endfor %}
+                <br />
                 {{ i['content'] }}
               </div>
             </a>
@@ -470,7 +541,7 @@
         </div>
         {% endif %} {% if is_search == 1 %}
         <div
-          class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
+          class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white timeline-section"
           style="width: 40em"
         >
           <a
@@ -517,7 +588,18 @@
               >
                 <strong class="mb-1">{{ k.owner }}</strong>
               </div>
-              <div class="col-10 mb-1 small">{{ k.content }}</div>
+              <div class="col-10 mb-1 small">
+                {% for i in k['image'] %}
+                <img
+                  src="https://storage.cloud.google.com/liner-351503.appspot.com/{{
+                i }}"
+                  style="width: 100%"
+                  onerror='this.style.display = "none"'
+                />
+                {% endfor %}
+                <br />
+                {{ k.content }}
+              </div>
             </a>
             {% endfor %} {% endif %}
           </div>

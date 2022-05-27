@@ -157,7 +157,7 @@
                   </h4>
                   Name: {{ i['name'] }}<br />
                   Email: {{ i['email'] }} <br />
-                  Profile: {{ i['profile'] }} <br />
+                  Bio: {{ i['profile'] }} <br />
                 </div>
               </li>
               <div class="follow-btn">
@@ -202,7 +202,7 @@
                   data-bs-target="#orders-collapse"
                   aria-expanded="false"
                 >
-                  Edit user info
+                  Edit Profile
                 </button>
                 <div class="collapse" id="orders-collapse">
                   <ul
@@ -221,6 +221,7 @@
                             class="edit-user-info"
                             id="editNameInProfile"
                             maxlength="280"
+                            placeholder="{{ i['name'] }}"
                           />
                           <button
                             type="submit"
@@ -239,13 +240,14 @@
                             for="profile"
                             class="edit-user-info form-label"
                           >
-                            Profile:
+                            Bio:
                             <textarea
                               name="profile"
-                              id="edit-user-profile"
+                              id="edit-profile-in-profilepage"
                               rows="5"
                               cols="39"
                               maxlength="280"
+                              placeholder="{{ i['profile'] }}"
                             ></textarea>
                           </label>
                           <button
@@ -341,7 +343,19 @@
                 >
                 {% endif %}
               </div>
-              <div class="col-10 mb-1 small">{{ i['content'] }}</div>
+              <div class="col-10 mb-1 small">
+                {% for k in i['image'] %}
+                <img
+                  src="https://storage.cloud.google.com/liner-351503.appspot.com/{{
+                k }}"
+                  style="width: 100%"
+                  onerror='this.style.display = "none"'
+                  class="post-img"
+                />
+                {% endfor %}
+                <br />
+                {{ i['content'] }}
+              </div>
             </a>
             {% endfor %}
           </div>
