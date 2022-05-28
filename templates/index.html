@@ -200,8 +200,6 @@
           </button>
         </form>
       </div>
-      <p id="message_username"></p>
-      <!-- display the message if fail to enter username-->
       <script>
         const searchParamsUsername = new URLSearchParams(
           window.location.search
@@ -210,21 +208,14 @@
           "warningInputUsername"
         );
         console.log(warningInputUsername);
-        if (warningInputUsername == 1)
-          document.getElementById("message_username").innerHTML =
-            "You should input username";
+        if (warningInputUsername == 1) alert("You should input username");
         else if (warningInputUsername == 2)
-          document.getElementById("message_username").innerHTML =
-            "You can not use this username";
+          alert("You can not use this username");
       </script>
       {% else %}
       <br />
       <main>
-        <div
-          class="flex-shrink-0 p-3 bg-white"
-          id="profileSection"
-          style="width: 20em"
-        >
+        <div class="flex-shrink-0 p-3 bg-white profileSection">
           <a
             class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom"
           >
@@ -312,15 +303,12 @@
                 </ul>
               </div>
             </li>
-            <p class="message" id="message_editUser"></p>
             <!-- display the message if fail to input name-->
             <script>
               const searchParams = new URLSearchParams(window.location.search);
               var warning = searchParams.get("warning");
               console.log(warning);
-              if (warning == 1)
-                document.getElementById("message_editUser").innerHTML =
-                  "You should input name";
+              if (warning == 1) alert("You should input name");
             </script>
             <li class="border-top my-3"></li>
           </ul>
@@ -329,7 +317,6 @@
         {% if is_search == 0 %}
         <div
           class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white timeline-section"
-          style="width: 40em"
         >
           <a
             class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
@@ -443,7 +430,6 @@
                     </ul>
                   </div>
                 </li>
-                <p class="message" id="message_addTweet"></p>
                 <!-- display the message if fail to add tweet-->
                 <script>
                   const searchParamsTweet = new URLSearchParams(
@@ -451,12 +437,9 @@
                   );
                   var warningUpload = searchParams.get("warningUpload");
                   console.log(warningUpload);
-                  if (warningUpload == 1)
-                    document.getElementById("message_addTweet").innerHTML =
-                      "You should input content";
+                  if (warningUpload == 1) alert("You should input content");
                   else if (warningUpload == 2)
-                    document.getElementById("message_addTweet").innerHTML =
-                      "Image file name exists already";
+                    alert("Image file name exists already");
                 </script>
               </ul>
             </a>
@@ -527,7 +510,7 @@
                 <img
                   src="https://storage.cloud.google.com/assignment3-348404.appspot.com/{{
                 k }}"
-                  style="width: 100%"
+                  style="width: 115%"
                   onerror='this.style.display = "none"'
                   class="post-img"
                 />
@@ -542,7 +525,6 @@
         {% endif %} {% if is_search == 1 %}
         <div
           class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white timeline-section"
-          style="width: 40em"
         >
           <a
             class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
@@ -593,7 +575,7 @@
                 <img
                   src="https://storage.cloud.google.com/liner-351503.appspot.com/{{
                 i }}"
-                  style="width: 100%"
+                  style="width: 115%"
                   onerror='this.style.display = "none"'
                 />
                 {% endfor %}

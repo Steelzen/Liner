@@ -19,26 +19,17 @@ main {
   justify-content: center;
 }
 
-#profileSection{
+.profileSection{
+  width: 20em;
   margin-right: 14px;
   margin-bottom: 14px;
 }
 
 .timeline-section {
+  width: 40em;
   margin-bottom: 14px;
 }
 
-/* Responsive layout - makes a one column layout instead of a two-column layout */
-@media (max-width: 800px) {
-  main {
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  #profileSection{
-    justify-content: center;
-  }
-}
 
 .b-example-divider {
   flex-shrink: 0;
@@ -370,6 +361,26 @@ label textarea{
 }
 
 
+/* Responsive layout - makes a one column layout instead of a two-column layout */
+@media (max-width: 800px) {
+  main {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .profileSection{
+    justify-content: center;
+    width: 31em;
+  }
+
+  .timeline-section {
+    width: 31em;
+  }
+
+  #searchText{
+    width: 10rem;
+  }
+}
 
 
 

@@ -50,6 +50,7 @@
       class="form-edit"
       action="/edit_tweet/{{ i['id'] }}"
       method="post"
+      name="editform"
     >
       <label for="editTweet">
         <textarea
@@ -70,20 +71,13 @@
         Submit
       </button>
     </form>
-    <p class="message" id="message_editTweet"></p>
-    <!-- display the message if fail to create taskboard-->
     <script>
       const searchParams = new URLSearchParams(window.location.search);
       var warning = searchParams.get("warningEdit");
       console.log(warning);
-      if (warning == 1)
-        document.getElementById("message_editTweet").innerHTML =
-          "You should input text.";
-      else if (warning == 2)
-        document.getElementById("message_editTweet").innerHTML =
-          "Tweet has been edited.";
+      if (warning == 1) alert("You should input text");
+      else if (warning == 2) alert("Post has been edited");
     </script>
-
     {% endfor %}
   </body>
 </html>
