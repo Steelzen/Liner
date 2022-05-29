@@ -5,7 +5,7 @@ You can access this app in here => https://liner-351503.ew.r.appspot.com/
 
 This is python project deployed on Google Cloud Platform focusing on backend technique. 
 
-Using Tech
+Used Tech
 - Flask
 - Jinja2
 - NoSQL
