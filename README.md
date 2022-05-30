@@ -1,5 +1,5 @@
 # Liner
-This is Twitter clone Social Networking Application with basic functions using Google Cloud Platform.
+This is mini Social Networking Application cloning Twitter using Google Cloud Platform.
 
 You can access this app in here => https://liner-351503.ew.r.appspot.com/
 
