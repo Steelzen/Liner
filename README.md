@@ -9,3 +9,5 @@ Used Tech
 - Flask
 - Jinja2
 - NoSQL
+- Google App Engine
+- Firbase
