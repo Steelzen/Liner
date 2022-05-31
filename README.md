@@ -1,9 +1,9 @@
 # Liner
-This is a mini social networking application cloning Twitter using Google Cloud Platform.
-
-You can access this app in here => https://liner-351503.ew.r.appspot.com/
+Liner is a mini social networking application cloning Twitter using Google Cloud Platform.
 
 This is python project deployed on Google Cloud Platform focusing on backend technique. 
+
+You can access this app in here => https://liner-351503.ew.r.appspot.com/
 
 Used tech
 - Flask
