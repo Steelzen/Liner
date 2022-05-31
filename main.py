@@ -2,6 +2,7 @@ import datetime
 import random
 import shlex
 import local_constants
+import uuid
 import blob_storage
 from flask import Flask, render_template, request, redirect, Response
 from flask import session, url_for
@@ -185,10 +186,7 @@ def addTweet():
             file = request.files['file_name']
             if file.filename == '':
                 image = []
-            else: 
-                blob_storage.addFile(file)
-                image.append(file.filename)
-    
+
             if request.form['content'] == "":
                 warningUpload = 1
             elif file.filename in file_list:
@@ -196,6 +194,11 @@ def addTweet():
                 redirect('/')    
             else:
                 id = createTweet(user_info['username'], request.form['content'], dt)
+
+                destination_blob_name = uuid.uuid4().hex 
+
+                blob_storage.upload_blob(file, destination_blob_name)
+                image.append(destination_blob_name)
 
                 tweet_list.append(id)
                 user_info.update({
@@ -299,6 +302,7 @@ def rootSearch(search_by, text):
 
     return render_template('index.html', user_data=claims, error_message=error_message, 
     user_info = user_info, user = user, result_name = result_name, result_content = result_content, is_search = is_search)
+
 
 
 @app.route('/<username>', methods=['GET','POST'])
@@ -545,6 +549,8 @@ def root():
             claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
 
             user_info = retrieveUserInfo(claims)
+
+            blob_storage.set_bucket_public_iam()
 
             if user_info == None:
                 createUserInfo(claims)
