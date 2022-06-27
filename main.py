@@ -10,16 +10,12 @@ from google.cloud import datastore
 from google.cloud import storage
 import google.oauth2.id_token
 from google.auth.transport import requests
-import os
 
 app = Flask(__name__)
 
 datastore_client = datastore.Client()
 
 firebase_request_adapter = requests.Request()
-
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "liner-351503-d0f71f6b8875.json"
-
 
 def retrieveUserInfo(claims):
     entity_key = datastore_client.key('User', claims['email'])
